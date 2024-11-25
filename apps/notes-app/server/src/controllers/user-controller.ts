@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateUserDto, UserEntity } from '../db/user.dto';
+import { CreateUserDto, UserEntity } from '../dtos/user.dto';
 import { validateCreateUserDto, validateUserDto } from '../utils/user.utils';
 import { createNewUser, doesUserExists, getUserByEmail, getUserByUsername, getUserByUsernameOrEmailOrMobile } from '../helpers/user.helper';
 import { comparePassword, hashPassword } from '../utils/bcryptjs';
@@ -52,6 +52,7 @@ export const signUpUser = async (req: Request<{}, {}, CreateUserDto>, res: Respo
 export const loginUser = async (req: Request<{}, {}, CreateUserDto>, res: Response) => {
 	try {
 		const user: CreateUserDto = req.body;
+		
 		/* trim user fields */
 		for (const key in user) {
 			user[key] = user[key].trim();

@@ -19,7 +19,7 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url, switchPage }: Props)
   const { control, handleSubmit, formState: { isValid, errors, touchedFields: touched, }, reset } = useForm({
     resolver: yupResolver(userSchema),
   });
-  const { error, loading, value, callApiFunction } = useApiCall()
+  const { error, loading, value, callApi } = useApiCall()
   const navigate = useNavigate()
 
 
@@ -32,10 +32,10 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url, switchPage }: Props)
         if (url) {
           if (data?.confirmPassword) delete data.confirmPassword
           if (title === 'Sign Up') {
-            await callApiFunction(AuthService.signUp(), data)
+            await callApi(AuthService.signUp(), data)
           }
           if (title === 'Log In') {
-            await callApiFunction(AuthService.logIn(), data)
+            await callApi(AuthService.logIn(), data)
           }
           console.log(value)
           reset()
@@ -90,11 +90,10 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url, switchPage }: Props)
           </div>
         }
         {
-          error && (
-            <div className="w-full flex flex-col justify-start items-center">
-              {JSON.stringify(error)}
-            </div>
-          )
+          error &&
+          <div className="w-full flex flex-col justify-start items-center">
+            {JSON.stringify(error)}
+          </div>
         }
         <div className="w-full flex flex-col items-end">
           <Link to={switchPage.path}>go to the {switchPage.label} page</Link>

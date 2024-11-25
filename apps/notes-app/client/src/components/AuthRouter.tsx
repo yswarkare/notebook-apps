@@ -15,7 +15,7 @@ export default function AuthRouter({ children }) {
       setLoading(true);
       setError(false);
       const res = await AuthService.authenticateToken()
-      const data = await res.json();
+      const data = await res.data;
       console.log(data);
       if (data.success &&!isLoggedIn) {
         updateContext('isLoggedIn', true);

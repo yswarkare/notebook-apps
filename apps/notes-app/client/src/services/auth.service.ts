@@ -1,6 +1,4 @@
-import { ActionFunction } from "react-router-dom";
-
-const baseUrl = 'http://localhost:5000/api';
+import axiosInstance from './axios.defaults';
 
 class AuthService {
 	#myHeaders = new Headers();
@@ -10,50 +8,35 @@ class AuthService {
 	}
 
 	static authenticateToken() {
-		return fetch(`${baseUrl}/auth/authenticate-token`, {
-			method: 'POST',
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({}),
-		});
+		return axiosInstance.post(`api/auth/authenticate-token`, {});
 	}
 
 	static verifyToken() {
-		return fetch(`${baseUrl}/auth/verify-token`, {
-			method: 'POST',
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({}),
-		});
+		return axiosInstance.post(`api/auth/verify-token`, {});
 	}
 
 	static signUpAndLogIn(url: string) {
 		return function (data: object) {
-			return fetch(url, {
-				method: 'POST',
-				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(data),
-			});
+			return axiosInstance.post(url, { ...data });
 		};
 	}
 
 	static signUp() {
-		return this.signUpAndLogIn(`${baseUrl}/user/sign-up`);
+		return this.signUpAndLogIn(`api/user/sign-up`);
 	}
 
 	static logIn() {
-		return this.signUpAndLogIn(`${baseUrl}/user/log-in`);
+		return this.signUpAndLogIn(`api/user/log-in`);
 	}
 
 	static logOut() {
-		return this.signUpAndLogIn(`${baseUrl}/auth/log-out`);
+		return this.signUpAndLogIn(`api/auth/log-out`);
 	}
 
 	static async isLoggedIn(): Promise<boolean> {
 		try {
 			const res = await this.authenticateToken();
-			const data = await res.json();
+			const data = await res.data;
 			if (data?.success && typeof data.success === 'boolean') return data.success;
 			else return false;
 		} catch (error) {

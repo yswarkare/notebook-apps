@@ -1,4 +1,4 @@
-import { CreateUserDto, UserDto } from '../db/user.dto';
+import { CreateUserDto, UserDto } from '../dtos/user.dto';
 import { validateEmail, validatePassword, passwordAllocations } from './validators';
 
 export const validateUserDto = (user: UserDto | CreateUserDto) => {

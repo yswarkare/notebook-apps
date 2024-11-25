@@ -1,4 +1,4 @@
-import { users } from "./schema/users";
+import { users } from "../db/schema/users";
 
 export interface UserDto {
 	[index: string]: string;

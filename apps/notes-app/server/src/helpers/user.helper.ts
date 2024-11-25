@@ -1,7 +1,7 @@
 import { eq, or } from 'drizzle-orm';
 import db from '../db';
 import { users } from '../db/schema/users';
-import { CreateUserDto, UserDto, UserEntity } from '../db/user.dto';
+import { CreateUserDto, UserDto, UserEntity } from '../dtos/user.dto';
 import { v4 as uuidV4 } from 'uuid';
 
 export const doesUserExists = async (user: UserDto): Promise<boolean | undefined> => {
