@@ -22,6 +22,8 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url, switchPage }: Props)
   const { error, loading, value, callApiFunction } = useApiCall()
   const navigate = useNavigate()
 
+
+
   const submitHandler = async (data) => {
     try {
       console.log(data)
@@ -53,6 +55,7 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url, switchPage }: Props)
           Object.entries(userProps).map(([key, value]) => (
             <Controller
               name={key}
+              key={key}
               control={control}
               render={({ field }) => (
                 <InputUi

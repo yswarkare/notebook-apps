@@ -1,3 +1,5 @@
+import { ActionFunction } from "react-router-dom";
+
 const baseUrl = 'http://localhost:5000/api';
 
 class AuthService {
@@ -46,6 +48,18 @@ class AuthService {
 
 	static logOut() {
 		return this.signUpAndLogIn(`${baseUrl}/auth/log-out`);
+	}
+
+	static async isLoggedIn(): Promise<boolean> {
+		try {
+			const res = await this.authenticateToken();
+			const data = await res.json();
+			if (data?.success && typeof data.success === 'boolean') return data.success;
+			else return false;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
 	}
 }
 

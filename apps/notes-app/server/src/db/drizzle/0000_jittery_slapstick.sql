@@ -5,6 +5,9 @@ CREATE TABLE IF NOT EXISTS "notebooks" (
 	"updated_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
+	"updated_by" uuid,
+	"created_by" uuid NOT NULL,
+	"deleted_by" uuid,
 	CONSTRAINT "notebooks_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -16,6 +19,9 @@ CREATE TABLE IF NOT EXISTS "notes" (
 	"updated_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
+	"updated_by" uuid,
+	"created_by" uuid NOT NULL,
+	"deleted_by" uuid,
 	CONSTRAINT "notes_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -25,12 +31,40 @@ CREATE TABLE IF NOT EXISTS "notes_to_notebook" (
 	CONSTRAINT "notes_to_notebook_notebookId_noteId_pk" PRIMARY KEY("notebookId","noteId")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "reference_urls" (
+	"id" uuid PRIMARY KEY NOT NULL,
+	"name" varchar(150) NOT NULL,
+	"url" varchar(255) NOT NULL,
+	"updated_at" timestamp,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"deleted_at" timestamp,
+	"updated_by" uuid,
+	"created_by" uuid NOT NULL,
+	"deleted_by" uuid,
+	CONSTRAINT "reference_urls_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "ref_urls_to_notebook" (
+	"notebookId" uuid NOT NULL,
+	"refUrlId" uuid NOT NULL,
+	CONSTRAINT "ref_urls_to_notebook_notebookId_refUrlId_pk" PRIMARY KEY("notebookId","refUrlId")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "ref_urls_to_notes" (
+	"noteId" uuid NOT NULL,
+	"refUrlId" uuid NOT NULL,
+	CONSTRAINT "ref_urls_to_notes_noteId_refUrlId_pk" PRIMARY KEY("noteId","refUrlId")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "tags" (
 	"id" uuid PRIMARY KEY NOT NULL,
 	"name" varchar(150) NOT NULL,
 	"updated_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
+	"updated_by" uuid,
+	"created_by" uuid NOT NULL,
+	"deleted_by" uuid,
 	CONSTRAINT "tags_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -78,6 +112,30 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "notes_to_notebook" ADD CONSTRAINT "notes_to_notebook_noteId_notes_id_fk" FOREIGN KEY ("noteId") REFERENCES "public"."notes"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "ref_urls_to_notebook" ADD CONSTRAINT "ref_urls_to_notebook_notebookId_notebooks_id_fk" FOREIGN KEY ("notebookId") REFERENCES "public"."notebooks"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "ref_urls_to_notebook" ADD CONSTRAINT "ref_urls_to_notebook_refUrlId_reference_urls_id_fk" FOREIGN KEY ("refUrlId") REFERENCES "public"."reference_urls"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "ref_urls_to_notes" ADD CONSTRAINT "ref_urls_to_notes_noteId_notebooks_id_fk" FOREIGN KEY ("noteId") REFERENCES "public"."notebooks"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "ref_urls_to_notes" ADD CONSTRAINT "ref_urls_to_notes_refUrlId_reference_urls_id_fk" FOREIGN KEY ("refUrlId") REFERENCES "public"."reference_urls"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

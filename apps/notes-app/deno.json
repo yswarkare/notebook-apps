@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "dev": "deno run --watch main.ts"
+  },
+  "tasks": {
+    "dev:client": "cd client && deno run dev",
+    "dev:server": "cd server && deno run dev",
+    "dev": "concurrently \"deno run dev:client\" \"deno run dev:server\""
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "concurrently": "npm:concurrently@^9.1.0"
+  }
+}

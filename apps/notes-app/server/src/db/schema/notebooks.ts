@@ -1,9 +1,10 @@
-import { pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core';
-import { timestamps } from './columns.helpers';
+import { pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
+import { modifierStamps, timestamps } from './columns.helpers';
 import { relations } from 'drizzle-orm';
 import { users } from './users';
 import { tagsToNotebook } from './tagsToNotebook';
 import { notesToNotebook } from './notesToNotebook';
+import { refUrlsToNotebook } from './refUrlsToNotebooks';
 
 export const notebooks = pgTable('notebooks', {
 	id: uuid().primaryKey().notNull().unique(),
@@ -12,6 +13,7 @@ export const notebooks = pgTable('notebooks', {
 		.references(() => users.id, { onDelete: 'cascade' })
 		.notNull(),
 	...timestamps,
+	...modifierStamps,
 });
 
 export const notebookRelations = relations(notebooks, ({ one, many }) => ({
@@ -21,4 +23,5 @@ export const notebookRelations = relations(notebooks, ({ one, many }) => ({
 	}),
 	tagsToNotebook: many(tagsToNotebook),
 	notesToNotebook: many(notesToNotebook),
+	refUrlsToNotebook: many(refUrlsToNotebook),
 }));

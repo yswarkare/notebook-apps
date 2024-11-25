@@ -1,5 +1,5 @@
 {
-  "id": "8c4f1986-2798-47e3-a1fe-3f5d7863ac1f",
+  "id": "f3047bb4-e132-40e6-9854-39e03f5f7b90",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -42,6 +42,24 @@
         "deleted_at": {
           "name": "deleted_at",
           "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         }
@@ -122,6 +140,24 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -200,6 +236,202 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.reference_urls": {
+      "name": "reference_urls",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "reference_urls_id_unique": {
+          "name": "reference_urls_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ref_urls_to_notebook": {
+      "name": "ref_urls_to_notebook",
+      "schema": "",
+      "columns": {
+        "notebookId": {
+          "name": "notebookId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refUrlId": {
+          "name": "refUrlId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ref_urls_to_notebook_notebookId_notebooks_id_fk": {
+          "name": "ref_urls_to_notebook_notebookId_notebooks_id_fk",
+          "tableFrom": "ref_urls_to_notebook",
+          "tableTo": "notebooks",
+          "columnsFrom": [
+            "notebookId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ref_urls_to_notebook_refUrlId_reference_urls_id_fk": {
+          "name": "ref_urls_to_notebook_refUrlId_reference_urls_id_fk",
+          "tableFrom": "ref_urls_to_notebook",
+          "tableTo": "reference_urls",
+          "columnsFrom": [
+            "refUrlId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ref_urls_to_notebook_notebookId_refUrlId_pk": {
+          "name": "ref_urls_to_notebook_notebookId_refUrlId_pk",
+          "columns": [
+            "notebookId",
+            "refUrlId"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ref_urls_to_notes": {
+      "name": "ref_urls_to_notes",
+      "schema": "",
+      "columns": {
+        "noteId": {
+          "name": "noteId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refUrlId": {
+          "name": "refUrlId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ref_urls_to_notes_noteId_notebooks_id_fk": {
+          "name": "ref_urls_to_notes_noteId_notebooks_id_fk",
+          "tableFrom": "ref_urls_to_notes",
+          "tableTo": "notebooks",
+          "columnsFrom": [
+            "noteId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ref_urls_to_notes_refUrlId_reference_urls_id_fk": {
+          "name": "ref_urls_to_notes_refUrlId_reference_urls_id_fk",
+          "tableFrom": "ref_urls_to_notes",
+          "tableTo": "reference_urls",
+          "columnsFrom": [
+            "refUrlId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ref_urls_to_notes_noteId_refUrlId_pk": {
+          "name": "ref_urls_to_notes_noteId_refUrlId_pk",
+          "columns": [
+            "noteId",
+            "refUrlId"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.tags": {
       "name": "tags",
       "schema": "",
@@ -232,6 +464,24 @@
         "deleted_at": {
           "name": "deleted_at",
           "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         }

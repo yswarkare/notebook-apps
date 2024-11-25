@@ -1,14 +1,15 @@
 import { lazy } from "react";
 import path from "./path";
+import { RouteObject } from "react-router-dom";
 
 const DefaultLayout = lazy(() => import("../layouts/DefaultLayout"));
 const Home = lazy(() => import("../pages/Home"));
-const Notebooks = lazy(() => import("../pages/Notebooks"));
+const NotebooksPage = lazy(() => import("../pages/NotebooksPage"));
 const About = lazy(() => import("../pages/About"));
 const Login = lazy(() => import("../pages/Login"));
 const Signup = lazy(() => import("../pages/Signup"));
 
-const routes = [{
+const routes: Array<RouteObject> = [{
   path: path.base,
   element: <DefaultLayout />,
   children: [{
@@ -16,7 +17,7 @@ const routes = [{
     element: <Home />,
   }, {
     path: path.notebooks,
-    element: <Notebooks />,
+    element: <NotebooksPage />,
   }, {
     path: path.about,
     element: <About />,
