@@ -1,8 +1,27 @@
 import { Request, Response, Router } from 'express';
 import { authenticateToken } from '../middlewares/passport';
 import { verifyToken } from '../utils/token.utils';
+import { loginUser, signUpUser } from '../controllers/auth.controller';
 
 const router = Router();
+
+router.post('/sign-up', async (req: Request, res: Response) => {
+	try {
+		await signUpUser(req, res);
+	} catch (error) {
+		console.log(error);
+		res.status(403).json({ success: false, message: 'failed to signup' });
+	}
+});
+
+router.post('/log-in', async (req: Request, res: Response) => {
+	try {
+		await loginUser(req, res);
+	} catch (error) {
+		console.log(error);
+		res.status(403).json({ success: false, message: 'failed to login' });
+	}
+});
 
 router.post('/authenticate-token', authenticateToken, async function (req: Request, res: Response) {
 	try {

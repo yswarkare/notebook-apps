@@ -1,4 +1,4 @@
-import { CreateUserDto } from '../dtos/user.dto';
+import { SignUpUserType } from '../zod/schema/User.zod';
 
 export const validateEmail = (mail: string) => {
 	console.log({ mail });
@@ -8,7 +8,7 @@ export const validateEmail = (mail: string) => {
 	return { valid: false, error: true, message: 'Email ID is not valid' };
 };
 
-export const passwordAllocations = (user: CreateUserDto) => {
+export const passwordAllocations = (user: SignUpUserType) => {
 	let password = user.password.trim();
 	let username = user.username.trim();
 	let emailId = user.email.trim();

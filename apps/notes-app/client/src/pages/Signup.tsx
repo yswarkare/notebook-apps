@@ -13,12 +13,12 @@ const userProps = {
 }
 
 const userSchema = object({
-  firstName: string().required().min(3).max(150),
-  lastName: string().required().min(3).max(150),
-  username: string().required().min(3).max(150),
-  mobile: string().required().min(10).max(15),
-  email: string().email().required().min(3).max(150),
-  password: string()
+  firstName: string().required().min(3).max(150).trim(),
+  lastName: string().required().min(3).max(150).trim(),
+  username: string().required().min(3).max(150).trim(),
+  mobile: string().required().min(10).max(15).trim(),
+  email: string().email().required().min(3).max(150).trim(),
+  password: string().trim()
     .min(8, "You must enter at least 8 characters.")
     .max(150)
     .matches(/[0-9]/, "You must enter at least one number.")
@@ -26,7 +26,7 @@ const userSchema = object({
     .matches(/[A-Z]/, "You must enter at least one uppercase letter.")
     .matches(/[#?!@$%^&*-]/, "You must enter at least one symbols.")
     .required(),
-  confirmPassword: string()
+  confirmPassword: string().trim()
     .oneOf([ref('password')], "Passwords must match.")
     .required(),
 })

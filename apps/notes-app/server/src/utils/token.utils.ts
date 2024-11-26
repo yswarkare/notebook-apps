@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { SECRET } from '../config';
-import { UserEntity } from '../dtos/user.dto';
+import { UserEntity } from '../db/schema/users';
 
 export const createToken = (user: UserEntity) => {
 	const token = jwt.sign(

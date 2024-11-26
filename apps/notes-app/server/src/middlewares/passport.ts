@@ -3,6 +3,7 @@ import passport from 'passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { SECRET } from '../config';
 import { getUserById } from '../helpers/user.helper';
+import { UserEntity } from '../db/schema/users';
 
 const cookieExtractor = function (req: Request) {
 	var token = null;
@@ -25,7 +26,7 @@ const opts = {
 
 export const passportStrategy = new Strategy(opts, async (jwt_payload, done) => {
 	try {
-		let user = await getUserById(jwt_payload.id);
+		let user: UserEntity = await getUserById(jwt_payload.id);
 		if (user) {
 			// console.log(user);
 			// console.log(jwt_payload);

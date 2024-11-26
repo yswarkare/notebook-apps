@@ -1,35 +1,35 @@
 import { Request, Response } from 'express';
-import { CreateUserDto, UserEntity } from '../dtos/user.dto';
-import { validateCreateUserDto, validateUserDto } from '../utils/user.utils';
-import { createNewUser, doesUserExists, getUserByEmail, getUserByUsername, getUserByUsernameOrEmailOrMobile } from '../helpers/user.helper';
+import { validateCreateUserDto } from '../utils/user.utils';
+import { createNewUser, doesUserExists, getUserByUsernameOrEmailOrMobile } from '../helpers/user.helper';
 import { comparePassword, hashPassword } from '../utils/bcryptjs';
 import { createToken } from '../utils/token.utils';
+import { UserEntity } from '../db/schema/users';
+import { LogInUserType, SignUpUserType, validateCreateUser, validateLogInUser, validateSignUpUser } from '../zod/schema/User.zod';
 
-export const signUpUser = async (req: Request<{}, {}, CreateUserDto>, res: Response) => {
+export const signUpUser = async (req: Request<{}, {}, SignUpUserType>, res: Response) => {
 	try {
-		const user: CreateUserDto = req.body;
+		const user: SignUpUserType = req.body;
 
-		/* trim user fields */
-		for (const key in user) {
-			user[key] = user[key].trim();
-		}
+		const validUser = validateSignUpUser(user);
+
 		/* validate user */
-		const { isValid, errors } = validateCreateUserDto(user);
+		const { isValid, errors } = validateCreateUserDto(validUser);
 		if (!isValid) return res.status(401).json({ success: false, message: errors });
 
 		/* check if user already exists */
-		const result = await doesUserExists(user);
+		const result = await doesUserExists(validUser);
 		if (result) return res.status(401).json({ success: false, message: `user already exists.` });
 
 		/* Hash password using bcryptjs. */
-		let { success, message, hashed } = await hashPassword(user.password);
+		let { success, message, hashed } = await hashPassword(validUser.password);
 		if (success === false) {
 			return res.status(401).json({ success, message });
 		}
-		if (hashed) user.password = hashed;
+		if (hashed) validUser.password = hashed;
 
 		/* create new user */
-		const newUser = await createNewUser(user);
+		const userValue = validateCreateUser(validUser);
+		const newUser = await createNewUser(userValue);
 
 		/* create jwt token */
 		const tokenInfo = createToken(newUser);
@@ -49,29 +49,20 @@ export const signUpUser = async (req: Request<{}, {}, CreateUserDto>, res: Respo
 	}
 };
 
-export const loginUser = async (req: Request<{}, {}, CreateUserDto>, res: Response) => {
+export const loginUser = async (req: Request<{}, {}, LogInUserType>, res: Response) => {
 	try {
-		const user: CreateUserDto = req.body;
-		
-		/* trim user fields */
-		for (const key in user) {
-			user[key] = user[key].trim();
-		}
+		const logInUser: LogInUserType = req.body;
 
 		/* validate user */
-		const { isValid, errors } = validateUserDto(user);
-		if (!isValid) return res.status(401).json({ success: false, message: errors });
+		const user = validateLogInUser(logInUser);
 
 		/* get user */
 		let userInfo: UserEntity;
-		try {			
-			if (user?.email) {
-				userInfo = await getUserByEmail(user.email);
-			} else if (user?.username) {
-				userInfo = await getUserByUsernameOrEmailOrMobile(user.username);
-			}
+
+		try {
+			userInfo = await getUserByUsernameOrEmailOrMobile(user.username);
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			return res.status(401).json({ success: false, message: `user doesn't exists.` });
 		}
 
@@ -98,10 +89,4 @@ export const loginUser = async (req: Request<{}, {}, CreateUserDto>, res: Respon
 	} catch (error) {
 		return res.status(400).json({ success: false, message: 'error occurred', error });
 	}
-};
-
-export const getUserInfo = async (req: Request, res: Response) => {
-	try {
-		console.log(req.user);
-	} catch (error) {}
 };

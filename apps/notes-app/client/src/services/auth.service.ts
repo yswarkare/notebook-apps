@@ -22,11 +22,11 @@ class AuthService {
 	}
 
 	static signUp() {
-		return this.signUpAndLogIn(`api/user/sign-up`);
+		return this.signUpAndLogIn(`api/auth/sign-up`);
 	}
 
 	static logIn() {
-		return this.signUpAndLogIn(`api/user/log-in`);
+		return this.signUpAndLogIn(`api/auth/log-in`);
 	}
 
 	static logOut() {

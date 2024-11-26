@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import userRoutes from './routes/user.router';
 import authRoutes from './routes/auth.routes';
+import notebookRoutes from './routes/notebook.routes';
+import { UserEntity } from './db/schema/users';
 
 function createApp() {
 	const app = express();
@@ -26,11 +28,29 @@ function createApp() {
 	app.use(cookieParser());
 
 	app.use(passport.initialize());
-	
+
 	passport.use(passportStrategy);
+
+	// connect.session()
+
+	// app.use(connect.cookieParser());
+	// app.use(connect.session({ secret: 'keyboard cat' }));
+	// app.use(passport.initialize());
+	// app.use(passport.session());
+
+	// passport.serializeUser(function (user: UserEntity, done) {
+	// 	done(null, user.id);
+	// });
+
+	// passport.deserializeUser(function (id, done) {
+	// 	User.findById(id, function (err, user) {
+	// 		done(err, user);
+	// 	});
+	// });
 
 	app.use('/api/auth', authRoutes);
 	app.use('/api/user', userRoutes);
+	app.use('/api/notebook', notebookRoutes);
 
 	return app;
 }

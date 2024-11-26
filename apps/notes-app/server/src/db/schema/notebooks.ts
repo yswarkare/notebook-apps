@@ -25,3 +25,5 @@ export const notebookRelations = relations(notebooks, ({ one, many }) => ({
 	notesToNotebook: many(notesToNotebook),
 	refUrlsToNotebook: many(refUrlsToNotebook),
 }));
+
+export type NotebookEntity = typeof notebooks.$inferInsert;

@@ -28,3 +28,5 @@ export const TagsToNotebookRelations = relations(tagsToNotebook, ({ one }) => ({
 		references: [notebooks.id],
 	}),
 }));
+
+export type NotebookTagsEntity = typeof tagsToNotebook.$inferInsert;

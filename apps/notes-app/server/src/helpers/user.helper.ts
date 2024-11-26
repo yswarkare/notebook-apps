@@ -1,10 +1,10 @@
 import { eq, or } from 'drizzle-orm';
 import db from '../db';
-import { users } from '../db/schema/users';
-import { CreateUserDto, UserDto, UserEntity } from '../dtos/user.dto';
+import { UserEntity, users } from '../db/schema/users';
 import { v4 as uuidV4 } from 'uuid';
+import { CreateUserType, UserType } from '../zod/schema/User.zod';
 
-export const doesUserExists = async (user: UserDto): Promise<boolean | undefined> => {
+export const doesUserExists = async (user: UserType): Promise<boolean | undefined> => {
 	try {
 		const foundUser = await db
 			.select()
@@ -17,12 +17,16 @@ export const doesUserExists = async (user: UserDto): Promise<boolean | undefined
 	} catch (error) {}
 };
 
-export const getUserById = async (userId: string) => {
-	const foundUser = await db.select().from(users).where(eq(users.id, userId));
-	if (!foundUser[0]) {
-		return false;
+export const getUserById = async (userId: string): Promise<UserEntity> => {
+	try {
+		const foundUser:Array<UserEntity> = await db.select().from(users).where(eq(users.id, userId));
+		if (!foundUser[0]) {
+			throw new Error('user not found');
+		}
+		return foundUser[0];
+	} catch (error) {
+		throw error;
 	}
-	return foundUser[0];
 };
 
 export const getUserByEmail = async (email: string): Promise<UserEntity> => {
@@ -60,7 +64,7 @@ export const getUserByUsernameOrEmailOrMobile = async (username: string): Promis
 	}
 };
 
-export const createNewUser = async (user: CreateUserDto): Promise<UserEntity> => {
+export const createNewUser = async (user: CreateUserType): Promise<UserEntity> => {
 	try {
 		const newUser: UserEntity = { ...user, id: uuidV4() };
 		const savedUser = await db.insert(users).values(newUser);
@@ -74,21 +78,25 @@ export const createNewUser = async (user: CreateUserDto): Promise<UserEntity> =>
 	}
 };
 
-export const doesUserAlreadyExists = async (user: CreateUserDto) => {
-	const exists: boolean[] = [];
-	const msg: string[] = [];
+export const doesUserAlreadyExists = async (user: CreateUserType) => {
+	try {
+		const exists: boolean[] = [];
+		const msg: string[] = [];
 
-	const emailExists = await getUserByEmail(user.email);
-	if (!emailExists) {
-		exists.push(emailExists);
-		msg.push('user with email id already exists');
+		const emailExists = await getUserByEmail(user.email);
+		if (!emailExists) {
+			exists.push(emailExists);
+			msg.push('user with email id already exists');
+		}
+
+		const usernameExists = getUserByUsername(user.email);
+		if (!usernameExists) {
+			exists.push(usernameExists);
+			msg.push('user with email id already exists');
+		}
+
+		return { exists, msg };
+	} catch (error) {
+		throw error;
 	}
-
-	const usernameExists = getUserByUsername(user.email);
-	if (!usernameExists) {
-		exists.push(usernameExists);
-		msg.push('user with email id already exists');
-	}
-
-	return { exists, msg };
 };
