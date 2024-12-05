@@ -30,7 +30,6 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url, switchPage }: Props)
       if (isValid) {
         console.log({ isValid, data })
         if (url) {
-          if (data?.confirmPassword) delete data.confirmPassword
           if (title === 'Sign Up') {
             await callApi(AuthService.signUp(), data)
           }
@@ -90,9 +89,10 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url, switchPage }: Props)
           </div>
         }
         {
-          error &&
+          error! &&
           <div className="w-full flex flex-col justify-start items-center">
-            {JSON.stringify(error)}
+            <p>{error?.status && error.status}</p>
+            <p>{error?.response?.data?.message && error.response.data.message}</p>
           </div>
         }
         <div className="w-full flex flex-col items-end">

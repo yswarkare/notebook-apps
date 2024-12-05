@@ -1,33 +1,40 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
-import useApiCall from "../../hooks/useApiCall";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { InputUi } from "yw-daisyui";
 import { BlocksShuffle, DotsMove } from "yw-icons";
-import NotebookService from "../../services/notebook.service";
-import path from "../../routes/path";
-import ApiError from "../../components/ApiError";
-import { CreateNotebookType, notebookSchema, NotebookType } from "../../models/notebook.model";
+import ApiError from "./ApiError";
+import useApiCall from "../hooks/useApiCall";
+import { AnyObject, Maybe, ObjectSchema } from "yup";
+import { AxiosResponse } from "axios";
 
-const notebookProps = {
-  title: 'Title',
+type Props<InputType> = {
+  title: string,
+  inputProps: object,
+  inputSchema: ObjectSchema<InputType, AnyObject, InputType, "">,
+  redirectPath: string,
+  apiFunction: Promise<AxiosResponse<InputType, InputType>>
 }
 
-function CreateNotebook() {
-  const { control, handleSubmit, formState: { isValid, errors, touchedFields: touched, }, reset } = useForm<CreateNotebookType>({
-    resolver: yupResolver<CreateNotebookType>(notebookSchema),
+type InputType2 = {
+  [x: string]: FieldValues | AnyObject | Maybe<AnyObject>
+}
+
+function InputForm<InputType extends InputType2, >({ title, inputProps, inputSchema, redirectPath, apiFunction }: Props<InputType>) {
+  const { control, handleSubmit, formState: { isValid, errors, touchedFields: touched, }, reset } = useForm<InputType>({
+    resolver: yupResolver<InputType>(inputSchema),
   });
-  const { error, loading, callApi } = useApiCall<CreateNotebookType, NotebookType>()
+  const { error, loading, callApi } = useApiCall<InputType, InputType>()
   const navigate = useNavigate()
 
-  const submitHandler = async (data: CreateNotebookType) => {
+  const submitHandler = async (data) => {
     try {
       console.log(data)
       if (isValid) {
         console.log({ isValid, data })
-        await callApi(NotebookService.creteNotebook, data)
+        await callApi(apiFunction, data)
         reset()
-        navigate(path.notebook_pages.list)
+        navigate(redirectPath)
       }
     } catch (error) {
       console.log(error)
@@ -36,10 +43,10 @@ function CreateNotebook() {
 
   return (
     <div className="w-full flex flex-col gap-3 justify-center items-center ">
-      <h1>Create Notebook</h1>
+      {title && <h1>{title}</h1>}
       <form className="w-full flex flex-col gap-3 justify-center items-center " onSubmit={handleSubmit(submitHandler)} >
         {
-          Object.entries(notebookProps).map(([key, value]) => (
+          Object.entries(inputProps).map(([key, value]) => (
             <Controller
               name={key}
               key={key}
@@ -84,4 +91,4 @@ function CreateNotebook() {
     </div>
   )
 }
-export default CreateNotebook
+export default InputForm

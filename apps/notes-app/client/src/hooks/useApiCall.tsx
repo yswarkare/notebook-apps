@@ -1,27 +1,26 @@
+import { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
 
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
-function useApiCall() {
+function useApiCall<T, D>() {
   const [loading, setLoading] = useState<boolean>();
-  const [error, setError] = useState();
-  const [value, setValue] = useState();
+  const [error, setError] = useState<AxiosError>();
+  const [value, setValue] = useState<D>();
 
-  async function callApi(func: (arg0: object) => Response | PromiseLike<Response>, body: object) {
+  async function callApi(func: (arg0: T) => Promise<AxiosResponse>, body: T) {
     try {
       setLoading(true);
       setError(undefined);
       setValue(undefined);
-      const res: Response = await func(body);
+      const res: AxiosResponse = await func(body);
       console.log({ res })
-      const cookies = res.headers.getSetCookie()
-      console.log({ cookies })
-      const data = await res.data;
-      console.log({ data })
+      const data = await res.data?.data;
       setValue(data);
     } catch (err) {
-      setError(err);
+      if (err instanceof AxiosError) setError(err);
+      throw err;
     } finally {
       setLoading(false)
     }

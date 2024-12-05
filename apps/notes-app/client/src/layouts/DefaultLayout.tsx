@@ -2,7 +2,8 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom'
 import { PageLoader } from 'yw-icons';
 import Header from './Header'
-const AuthRouter = lazy(() => import('../components/AuthRouter'));
+
+const AuthRouter = lazy(async () => await import('../components/AuthRouter'));
 
 function DefaultLayout() {
   return (

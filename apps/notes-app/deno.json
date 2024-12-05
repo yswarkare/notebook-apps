@@ -4,7 +4,7 @@
   },
   "tasks": {
     "dev:client": "cd client && deno run dev",
-    "dev:server": "cd server && deno run dev",
+    "dev:server": "cd server && deno run start:dev",
     "dev": "concurrently \"deno run dev:client\" \"deno run dev:server\""
   },
   "imports": {

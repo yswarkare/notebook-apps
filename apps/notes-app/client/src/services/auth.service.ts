@@ -1,11 +1,6 @@
 import axiosInstance from './axios.defaults';
 
 class AuthService {
-	#myHeaders = new Headers();
-
-	constructor() {
-		this.#myHeaders.append('Content-Type', 'application/json');
-	}
 
 	static authenticateToken() {
 		return axiosInstance.post(`api/auth/authenticate-token`, {});

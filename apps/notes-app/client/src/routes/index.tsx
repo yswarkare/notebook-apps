@@ -2,15 +2,17 @@ import { lazy } from "react";
 import path from "./path";
 import { RouteObject } from "react-router-dom";
 
-const DefaultLayout = lazy(() => import("../layouts/DefaultLayout"));
-const Home = lazy(() => import("../pages/Home"));
-const NotebooksPage = lazy(() => import("../pages/NotebooksPage"));
-const About = lazy(() => import("../pages/About"));
-const Login = lazy(() => import("../pages/Login"));
-const Signup = lazy(() => import("../pages/Signup"));
-const NotebooksDefault = lazy(() => import("../pages/notebooks/NotebooksDefault"));
-const ListNotebooks = lazy(() => import("../pages/notebooks/ListNotebooks"));
-const CreateNotebook = lazy(() => import('../pages/notebooks/CreateNotebook'));
+const DefaultLayout = lazy(async () => await import("../layouts/DefaultLayout"));
+const Home = lazy(async () => await import("../pages/Home"));
+const NotebooksPage = lazy(async () => await import("../pages/NotebooksPage"));
+const About = lazy(async () => await import("../pages/About"));
+const Login = lazy(async () => await import("../pages/Login"));
+const Signup = lazy(async () => await import("../pages/Signup"));
+const NotebooksDefault = lazy(async () => await import("../pages/notebooks/NotebooksDefault"));
+const ListNotebooks = lazy(async () => await import("../pages/notebooks/ListNotebooks"));
+const CreateNotebook = lazy(async () => await import('../pages/notebooks/CreateNotebook'));
+const NotebookInfo = lazy(async () => await import('../pages/notebooks/NotebookInfo'));
+
 
 const routes: Array<RouteObject> = [{
   path: path.base,
@@ -27,6 +29,9 @@ const routes: Array<RouteObject> = [{
     }, {
       path: path.notebook_pages.create,
       element: <CreateNotebook />
+    }, {
+      path: `${path.notebook_pages.notebook}/:notebookId`,
+      element: <NotebookInfo />
     }, {
       path: path.notebook_pages.list,
       element: <ListNotebooks />
