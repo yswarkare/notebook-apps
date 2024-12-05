@@ -2,7 +2,7 @@ import { Request } from 'express';
 import passport from 'passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { SECRET } from '../config';
-import { getUserById } from '../helpers/user.helper';
+import { getUserById } from '../repositories/user.repo';
 import { UserEntity } from '../db/schema/users';
 
 const cookieExtractor = function (req: Request) {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { validateCreateUserDto } from '../utils/user.utils';
-import { createNewUser, doesUserExists, getUserByUsernameOrEmailOrMobile } from '../helpers/user.helper';
+import { createNewUser, doesUserExists, getUserByUsernameOrEmailOrMobile } from '../repositories/user.repo';
 import { comparePassword, hashPassword } from '../utils/bcryptjs';
 import { createToken } from '../utils/token.utils';
 import { UserEntity } from '../db/schema/users';
@@ -63,14 +63,14 @@ export const loginUser = async (req: Request<{}, {}, LogInUserType>, res: Respon
 			userInfo = await getUserByUsernameOrEmailOrMobile(user.username);
 		} catch (error) {
 			console.log(error);
-			return res.status(401).json({ success: false, message: `user doesn't exists.` });
+			res.status(401).json({ success: false, message: `user doesn't exists.` });
 		}
 
 		if (userInfo! && typeof userInfo != 'boolean' && userInfo?.password) {
 			/* compare password using bcryptjs. */
 			let { success, message } = await comparePassword(user.password, userInfo.password);
 			if (success === false) {
-				return res.status(403).json({ success, message });
+				res.status(403).json({ success, message });
 			}
 		}
 
@@ -82,11 +82,11 @@ export const loginUser = async (req: Request<{}, {}, LogInUserType>, res: Respon
 
 		/* return response */
 		if (tokenInfo?.token) {
-			return res.status(200).json({ success: true, message: 'user logged in successfully!' });
+			res.status(200).json({ success: true, message: 'user logged in successfully!' });
 		} else {
-			return res.status(400).json({ success: false, message: 'error occurred! failed to log in user' });
+			res.status(400).json({ success: false, message: 'error occurred! failed to log in user' });
 		}
 	} catch (error) {
-		return res.status(400).json({ success: false, message: 'error occurred', error });
+		res.status(400).json({ success: false, message: 'error occurred', error });
 	}
 };

@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import db from '../db';
 import { NotebookTagsEntity, tagsToNotebook } from '../db/schema/tagsToNotebook';
-import { NotebookTagType } from '../zod/schema/tag.zod';
+import { NotebookTagType } from '../zod/schema/notebookTags.zod';
 
 export const doesNotebookTagExists = async (notebookTag: NotebookTagType): Promise<boolean | undefined> => {
 	try {

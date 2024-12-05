@@ -5,6 +5,7 @@ const CreateTagSchema = z
 	.object({
 		name: z.string().max(255).trim(),
 		userId: z.string().uuid().trim(),
+		notebookId: z.string().uuid().trim(),
 	})
 	.required()
 	.strip();
@@ -32,16 +33,6 @@ const TagSchema = z
 
 export type TagType = z.infer<typeof TagSchema>;
 
-export const validateTagObject = validateZodSchema<TagType>(TagSchema);
-
-const NotebookTagSchema = z
-	.object({
-		notebookId: z.string().uuid().trim(),
-		tagId: z.string().uuid().trim(),
-	})
-	.required()
-	.strip();
-
-export type NotebookTagType = z.infer<typeof NotebookTagSchema>;
-
-export const validateNotebookTag = validateZodSchema<NotebookTagType>(NotebookTagSchema);
+export const validateTag = validateZodSchema<TagType>(TagSchema);
+export const validateCreateTag = validateZodSchema<CreateTagType>(CreateTagSchema);
+export const validateUpdateTag = validateZodSchema<UpdateTagType>(UpdateTagSchema);

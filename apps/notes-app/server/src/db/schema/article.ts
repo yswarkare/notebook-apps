@@ -1,15 +1,14 @@
-import { pgTable, smallint, text, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, smallint, uuid, varchar } from 'drizzle-orm/pg-core';
 import { modifierStamps, timestamps } from './columns.helpers';
 import { relations } from 'drizzle-orm';
-import { tagsToNotes } from './tagsToNotes';
-import { refUrlsToNotes } from './refUrlsToNotes';
+import { tagsToArticle } from './tagsToArticle';
+import { refUrlsToArticle } from './refUrlsToArticle';
 import { notebooks } from './notebooks';
 
-export const notes = pgTable('notes', {
+export const article = pgTable('article', {
 	id: uuid().primaryKey().notNull().unique(),
 	title: varchar({ length: 255 }).notNull(),
 	orderId: smallint().unique().notNull(),
-	content: text().notNull(),
 	notebookId: uuid()
 		.references(() => notebooks.id, { onDelete: 'cascade' })
 		.notNull(),
@@ -17,11 +16,11 @@ export const notes = pgTable('notes', {
 	...modifierStamps,
 });
 
-export const notesRelations = relations(notes, ({ many, one }) => ({
+export const articleRelations = relations(article, ({ many, one }) => ({
 	notebook: one(notebooks, {
-		fields: [notes.notebookId],
+		fields: [article.notebookId],
 		references: [notebooks.id],
 	}),
-  tagsToNotes: many(tagsToNotes),
-	refUrlsToNotes: many(refUrlsToNotes),
+  tagsToArticle: many(tagsToArticle),
+	refUrlsToArticle: many(refUrlsToArticle),
 }));

@@ -1,7 +1,6 @@
 import { pgTable, primaryKey, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { notebooks } from './notebooks';
-import { tags } from './tags';
 import { referenceUrls } from './referenceUrls';
 
 export const refUrlsToNotebook = pgTable(

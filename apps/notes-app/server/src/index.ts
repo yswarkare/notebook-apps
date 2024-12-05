@@ -1,4 +1,4 @@
-import http from 'http';
+import http from 'node:http';
 import { port } from './config/index';
 // import connectToDb from './db';
 import createApp from './app';

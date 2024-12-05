@@ -8,7 +8,8 @@
     "build": "tsc -b",
     "build:w": "tsc -b -w",
     "dev:w": "nodemon dist/index.js",
-    "dev": "concurrently \"pnpm build:w\" \"pnpm dev:w\""
+    "dev": "concurrently \"pnpm build:w\" \"pnpm dev:w\"",
+    "start:dev": "deno run --unstable-sloppy-imports --allow-env --allow-read --allow-net --watch \"./src/index.ts\""
   },
   "keywords": [],
   "author": "",
@@ -38,6 +39,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.1",
+    "drizzle-zod": "^0.5.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "passport": "^0.7.0",

@@ -1,6 +1,5 @@
 import { pgTable, primaryKey, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { notebooks } from './notebooks';
 import { notes } from './notes';
 import { referenceUrls } from './referenceUrls';
 
@@ -9,7 +8,7 @@ export const refUrlsToNotes = pgTable(
 	{
 		noteId: uuid()
 			.notNull()
-			.references(() => notebooks.id),
+			.references(() => notes.id),
 		refUrlId: uuid()
 			.notNull()
 			.references(() => referenceUrls.id),
@@ -19,7 +18,7 @@ export const refUrlsToNotes = pgTable(
 	})
 );
 
-export const RefUrlsToNotebookRelations = relations(refUrlsToNotes, ({ one }) => ({
+export const RefUrlsToNoteRelations = relations(refUrlsToNotes, ({ one }) => ({
 	refUrl: one(referenceUrls, {
 		fields: [refUrlsToNotes.refUrlId],
 		references: [referenceUrls.id],
