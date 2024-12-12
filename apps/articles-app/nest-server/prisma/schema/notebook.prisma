@@ -1,0 +1,18 @@
+model Notebook {
+  id      String @id @default(uuid()) @db.Uuid
+  name    String @db.VarChar(255)
+  orderId Int    @db.SmallInt
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  tags       Tag[]
+  refUrls    ReferencesUrl[]
+  article    Article[]
+  cliffNotes CliffNotes[]
+}
