@@ -1,0 +1,20 @@
+model Section {
+  id      String @id @default(uuid()) @db.Uuid
+  name    String @db.VarChar(255)
+  orderId Int    @db.SmallInt
+  content String @db.Text
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  articleId String  @db.Uuid
+  article   Article @relation(fields: [articleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  tags    Tag[]
+  refUrls ReferencesUrl[]
+  images  Images[]
+
+  @@map("sections")
+}
