@@ -1,14 +1,20 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { SignUpDto } from './dto/sign-up.dto';
-import { LogInDto } from './dto/log-in.dto';
 import { UserService } from '../user/user.service';
 import { CreateUserDto, UserRole } from '../user/dto/create-user.dto';
 import { compare } from 'bcryptjs';
 import { User } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
+import { TokenService } from 'src/token/token.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly configService: ConfigService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   async verifyUser(username: string, password: string): Promise<User> {
     try {
@@ -23,16 +29,20 @@ export class AuthService {
     }
   }
 
-  async register(user: SignUpDto) {
+  async register(user: SignUpDto, res: Response) {
     const newUser: CreateUserDto = { ...user, role: UserRole.USER };
-    return await this.userService.create(newUser);
+    const savedUser = await this.userService.create(newUser);
+    await this.login(savedUser, res);
   }
 
-  async login(user: LogInDto) {
-    const savedUser = await this.userService.findByUsernameOrEmailOrPhone(
-      user.username,
-    );
-    let isMatch = await compare(user.password, savedUser.password);
-    return `This action updates a auth`;
+  async login(user: User, res: Response) {
+    const { token: accessToken, expiresIn: expiresAccessToken } =
+      this.tokenService.createToken(user);
+
+    res.cookie('Authentication', accessToken, {
+      httpOnly: true,
+      secure: this.configService.get('NODE_ENV') === 'production',
+      expires: expiresAccessToken,
+    });
   }
 }
