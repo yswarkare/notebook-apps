@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../token/guards/jwt-auth.guard';
+import { CurrentUser } from '../auth/current-user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
@@ -25,9 +29,10 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  findOne(@CurrentUser() user: User) {
+    return user;
   }
 
   @Patch(':id')

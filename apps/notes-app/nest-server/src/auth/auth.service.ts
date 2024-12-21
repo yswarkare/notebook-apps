@@ -6,7 +6,7 @@ import { compare } from 'bcryptjs';
 import { User } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { TokenService } from 'src/token/token.service';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
@@ -36,13 +36,23 @@ export class AuthService {
   }
 
   async login(user: User, res: Response) {
-    const { token: accessToken, expiresIn: expiresAccessToken } =
-      this.tokenService.createToken(user);
+    const { accessToken, expiresAccessToken } =
+      this.tokenService.createAccessToken(user);
+    const { refreshToken, expiresRefreshToken } =
+      this.tokenService.createRefreshToken(user);
+
+    await this.userService.saveRefreshToken(user, refreshToken);
 
     res.cookie('Authentication', accessToken, {
       httpOnly: true,
       secure: this.configService.get('NODE_ENV') === 'production',
       expires: expiresAccessToken,
+    });
+
+    res.cookie('Refresh', refreshToken, {
+      httpOnly: true,
+      secure: this.configService.get('NODE_ENV') === 'production',
+      expires: expiresRefreshToken,
     });
   }
 }

@@ -11,5 +11,15 @@ install following dependencies for authentication
 run following cli
 
 ```nodejs
-deno install npm:@nestjs/passport npm:@nestjs/jwt npm:passport npm:passport-local npm:passport-jwt
+pnpm add @nestjs/passport @nestjs/jwt passport passport-local passport-jwt
+```
+
+add dev dependencies
+
+- @types/passport-local
+- @types/passport-jwt
+- @types/cookie-parser
+
+```nodejs
+pnpm add -D @types/passport-local @types/passport-jwt @types/cookie-parser
 ```

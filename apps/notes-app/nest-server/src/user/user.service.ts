@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -17,6 +21,7 @@ export class UserService {
     return await this.prisma.user.create({
       data: {
         password: hashedPassword,
+        refreshToken: '',
         ...newUser,
       },
     });
@@ -34,7 +39,7 @@ export class UserService {
     });
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOneById(id: string): Promise<User> {
     return await this.prisma.user.findUnique({
       where: {
         id: id,
@@ -63,6 +68,34 @@ export class UserService {
       },
       data: updateUserDto,
     });
+  }
+
+  async saveRefreshToken(user: User, token: string) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedToken = await bcrypt.hash(token, salt);
+    return this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: { refreshToken: hashedToken },
+    });
+  }
+
+  async verifyUserRefreshToken(userId: string, refreshToken: string) {
+    try {
+      const user = await this.findOneById(userId);
+      const authenticated = await bcrypt.compare(
+        refreshToken,
+        user.refreshToken,
+      );
+      if (authenticated) {
+        throw new UnauthorizedException();
+      }
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw new UnauthorizedException('Refresh Token is not valid.');
+    }
   }
 
   remove(id: string) {
