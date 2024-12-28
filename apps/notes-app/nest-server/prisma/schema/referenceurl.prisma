@@ -1,7 +1,6 @@
-model ReferencesUrl {
+model ReferenceUrl {
   id      String  @id @default(uuid()) @db.Uuid
   url     String  @db.VarChar(255)
-  orderId Int     @db.SmallInt
   type    UrlType @default(url)
 
   createdAt DateTime @default(now())
@@ -15,6 +14,7 @@ model ReferencesUrl {
   cliffNotes CliffNotes[]
   questions  Question[]
 
+  @@unique([url, createdBy])
   @@map("reference_urls")
 }
 

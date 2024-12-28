@@ -14,7 +14,9 @@ model Question {
   article   Article @relation(fields: [articleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   tags    Tag[]
-  refUrls ReferencesUrl[]
+  refUrls ReferenceUrl[]
 
+  @@unique([name, articleId, createdBy])
+  @@unique([orderId, articleId, createdBy])
   @@map("questions")
 }

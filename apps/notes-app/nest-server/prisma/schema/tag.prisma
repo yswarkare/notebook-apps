@@ -7,11 +7,12 @@ model Tag {
   updatedAt DateTime @updatedAt
   updatedBy String   @db.Uuid
 
-  notebook    Notebook[]
+  notebooks   Notebook[]
   articleTags Article[]
   cliffNotes  CliffNotes[]
-  section     Section[]
+  sections    Section[]
   questions   Question[]
 
+  @@unique([name, createdBy])
   @@map("tags")
 }

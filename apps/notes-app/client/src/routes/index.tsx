@@ -8,6 +8,7 @@ const NotebooksPage = lazy(async () => await import("../pages/NotebooksPage"));
 const About = lazy(async () => await import("../pages/About"));
 const Login = lazy(async () => await import("../pages/Login"));
 const Signup = lazy(async () => await import("../pages/Signup"));
+const ErrorPage = lazy(async () => await import("../pages/error/ErrorPage"));
 const NotebooksDefault = lazy(async () => await import("../pages/notebooks/NotebooksDefault"));
 const ListNotebooks = lazy(async () => await import("../pages/notebooks/ListNotebooks"));
 const CreateNotebook = lazy(async () => await import('../pages/notebooks/CreateNotebook'));
@@ -51,7 +52,7 @@ const routes: Array<RouteObject> = [{
 },
 {
   path: "/*",
-  element: <>404 error!</>
+  element: <ErrorPage status={404} errors={['Page not found!']} />
 }
 ]
 

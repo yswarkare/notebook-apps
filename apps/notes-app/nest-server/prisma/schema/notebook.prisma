@@ -12,9 +12,11 @@ model Notebook {
   updatedBy String   @db.Uuid
 
   tags       Tag[]
-  refUrls    ReferencesUrl[]
-  article    Article[]
+  refUrls    ReferenceUrl[]
+  articles    Article[]
   cliffNotes CliffNotes[]
 
+  @@unique([name, userId])
+  @@unique([orderId, userId])
   @@map("notebooks")
 }

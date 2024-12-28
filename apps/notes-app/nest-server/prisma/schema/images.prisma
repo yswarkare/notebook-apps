@@ -11,6 +11,8 @@ model Images {
 
   sections Section[]
 
+  @@unique([url, createdBy])
+  @@unique([orderId, createdBy])
   @@map("images")
 }
 

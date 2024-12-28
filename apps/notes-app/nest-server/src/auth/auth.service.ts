@@ -55,4 +55,23 @@ export class AuthService {
       expires: expiresRefreshToken,
     });
   }
+
+  async logOut(user: User, res: Response) {
+    await this.userService.removeRefreshToken(user);
+
+    const expiresIn = new Date();
+    expiresIn.setMilliseconds(expiresIn.getTime() + 1200000);
+
+    res.cookie('Authentication', '', {
+      httpOnly: true,
+      secure: this.configService.get('NODE_ENV') === 'production',
+      expires: expiresIn,
+    });
+
+    res.cookie('Refresh', '', {
+      httpOnly: true,
+      secure: this.configService.get('NODE_ENV') === 'production',
+      expires: expiresIn,
+    });
+  }
 }

@@ -7,6 +7,10 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TokenModule } from './token/token.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { NotebookModule } from './notebook/notebook.module';
+import { TagModule } from './tag/tag.module';
+import { RefurlModule } from './refurl/refurl.module';
+import { CliffNotesModule } from './cliff-notes/cliff-notes.module';
 
 @Module({
   imports: [
@@ -15,6 +19,10 @@ import { PrismaModule } from './prisma/prisma.module';
     UserModule,
     TokenModule,
     PrismaModule,
+    NotebookModule,
+    TagModule,
+    RefurlModule,
+    CliffNotesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

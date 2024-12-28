@@ -3,12 +3,11 @@ import {
   IsNotEmpty,
   IsString,
   IsAlpha,
-  Matches,
   Length,
   IsAlphanumeric,
-  IsNumber,
   IsEmail,
   IsStrongPassword,
+  Matches,
 } from 'class-validator';
 import { IsValidPassword } from '../../validators/is-valid-password.validator';
 
@@ -31,15 +30,13 @@ export class SignUpDto {
   @IsString()
   @Length(2, 50, { message: 'email must be between 2 and 50 characters' })
   @IsEmail({}, { message: 'Invalid email address' })
-  // @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/g)
   readonly email: string;
 
   @IsNotEmpty()
   @IsString()
-  @IsNumber()
-  @Matches(/^[6789]\d{9}$/)
-  @Length(10, 20, {
-    message: 'Phone Number must be between 10 and 20 characters',
+  @Matches(/^(\+)?(\(?\d+\)?)(([\s-]+)?(\d+)){0,}$/g)
+  @Length(10, 15, {
+    message: 'Phone Number must be between 10 and 15 characters',
   })
   readonly phoneNumber: string;
 

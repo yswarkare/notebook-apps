@@ -13,8 +13,10 @@ model Section {
   article   Article @relation(fields: [articleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   tags    Tag[]
-  refUrls ReferencesUrl[]
+  refUrls ReferenceUrl[]
   images  Images[]
 
+  @@unique([name, articleId, createdBy])
+  @@unique([orderId, articleId, createdBy])
   @@map("sections")
 }

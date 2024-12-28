@@ -1,6 +1,11 @@
 import axiosInstance from './axios.defaults';
 
 class AuthService {
+	axios;
+
+	constructor() {
+		this.axios = axiosInstance
+	}
 
 	static authenticateToken() {
 		return axiosInstance.post(`api/auth/authenticate-token`, {});
@@ -8,6 +13,10 @@ class AuthService {
 
 	static verifyToken() {
 		return axiosInstance.post(`api/auth/verify-token`, {});
+	}
+
+	static refreshToken() {
+		return axiosInstance.post(`api/auth/refresh`, {});
 	}
 
 	static signUpAndLogIn(url: string) {

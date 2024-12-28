@@ -3,24 +3,24 @@ import SignUpOrLogin from "../components/SignUpOrLogIn";
 import path from '../routes/path';
 
 const userProps = {
-  firstName: "First Name",
-  lastName: "Last Name",
+  firstname: "First Name",
+  lastname: "Last Name",
   username: "Username",
-  mobile: "Mobile Number",
+  phoneNumber: "Mobile Number",
   email: "Email ID",
   password: "Password",
   confirmPassword: "Confirm Password",
 }
 
 const userSchema = object({
-  firstName: string().required().min(3).max(150).trim(),
-  lastName: string().required().min(3).max(150).trim(),
+  firstname: string().required().min(3).max(150).trim(),
+  lastname: string().required().min(3).max(150).trim(),
   username: string().required().min(3).max(150).trim(),
-  mobile: string().required().min(10).max(15).trim(),
+  phoneNumber: string().required().min(10).max(15).trim(),
   email: string().email().required().min(3).max(150).trim(),
   password: string().trim()
     .min(8, "You must enter at least 8 characters.")
-    .max(150)
+    .max(100)
     .matches(/[0-9]/, "You must enter at least one number.")
     .matches(/[a-z]/, "You must enter at least one lowercase letter.")
     .matches(/[A-Z]/, "You must enter at least one uppercase letter.")

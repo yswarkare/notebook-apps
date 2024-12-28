@@ -19,21 +19,17 @@ const items2 = [
   { label: 'Log In', path: path.login },
 ]
 
-const items3 = [
-  { label: 'Log Out', path: path.signup },
-]
-
 const headerItems = (loggedIn: boolean) => !loggedIn ? [...items1, ...items2] : [...items1]
 
 function Header() {
   const state = useContextState();
   const updateContext = useUpdateContextState()
   const navigate = useNavigate()
-  const { loading, callApiFunction } = useApiCall()
+  const { loading, callApi } = useApiCall<object, null>()
 
   const logOut = async () => {
     try {
-      await callApiFunction(AuthService.logOut(), {});
+      await callApi(AuthService.logOut(), {});
       navigate('/login');
       updateContext('isLoggedIn', false)
     } catch (error) {

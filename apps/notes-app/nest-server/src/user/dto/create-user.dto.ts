@@ -2,13 +2,13 @@ import {
   IsNotEmpty,
   IsString,
   IsAlpha,
-  Matches,
   IsEnum,
   Length,
   IsEmail,
   IsAlphanumeric,
-  IsNumber,
   IsOptional,
+  IsStrongPassword,
+  Matches,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { IsValidPassword } from '../../validators/is-valid-password.validator';
@@ -42,11 +42,11 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  @Length(10, 20, {
-    message: 'Phone Number must be between 10 and 20 characters',
+  @IsString()
+  @Matches(/^(\+)?(\(?\d+\)?)(([\s-]+)?(\d+)){0,}$/g)
+  @Length(10, 15, {
+    message: 'Phone Number must be between 10 and 15 characters',
   })
-  @Matches(/^[6789]\d{9}$/)
   readonly phoneNumber: string;
 
   @IsNotEmpty()
@@ -61,6 +61,7 @@ export class CreateUserDto {
   @Transform(({ value }) => value.trim())
   @Length(8, 50, { message: 'Password must be between 8 and 50 characters' })
   @IsValidPassword()
+  @IsStrongPassword()
   readonly password: string;
 
   @IsOptional()

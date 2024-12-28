@@ -11,6 +11,7 @@ import { TokenModule } from '../token/token.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from '../token/strategies/jwt.strategy';
 
 @Module({
   imports: [UserModule, PrismaModule, JwtModule, PassportModule, TokenModule],
@@ -18,10 +19,11 @@ import { PassportModule } from '@nestjs/passport';
   providers: [
     AuthService,
     UserService,
-    LocalStrategy,
-    JwtRefreshStrategy,
     TokenService,
     ConfigService,
+    JwtStrategy,
+    LocalStrategy,
+    JwtRefreshStrategy,
   ],
 })
 export class AuthModule {}

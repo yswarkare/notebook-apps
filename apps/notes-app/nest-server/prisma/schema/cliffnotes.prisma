@@ -13,7 +13,9 @@ model CliffNotes {
   notebook   Notebook @relation(fields: [notebookId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   tags    Tag[]
-  refUrls ReferencesUrl[]
+  refUrls ReferenceUrl[]
 
+  @@unique([name, notebookId, createdBy])
+  @@unique([orderId, notebookId, createdBy])
   @@map("cliff_notes")
 }

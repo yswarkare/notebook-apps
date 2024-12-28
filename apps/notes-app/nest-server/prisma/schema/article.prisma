@@ -13,8 +13,10 @@ model Article {
 
   tags      Tag[]
   Section   Section[]
-  refUrls   ReferencesUrl[]
+  refUrls   ReferenceUrl[]
   questions Question[]
 
+  @@unique([name, notebookId, createdBy])
+  @@unique([orderId, notebookId, createdBy])
   @@map("articles")
 }

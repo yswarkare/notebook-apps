@@ -6,7 +6,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import bcrypt from 'bcryptjs';
+import { compare, genSalt, hash } from 'bcryptjs';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -15,9 +15,9 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     const { password, ...newUser } = createUserDto;
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-    const hashedPassword = hash.toString();
+    const salt = await genSalt(10);
+    const hashed = await hash(password, salt);
+    const hashedPassword = hashed.toString();
     return await this.prisma.user.create({
       data: {
         password: hashedPassword,
@@ -71,8 +71,8 @@ export class UserService {
   }
 
   async saveRefreshToken(user: User, token: string) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedToken = await bcrypt.hash(token, salt);
+    const salt = await genSalt(10);
+    const hashedToken = await hash(token, salt);
     return this.prisma.user.update({
       where: {
         id: user.id,
@@ -81,13 +81,19 @@ export class UserService {
     });
   }
 
+  async removeRefreshToken(user: User) {
+    return this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: { refreshToken: '' },
+    });
+  }
+
   async verifyUserRefreshToken(userId: string, refreshToken: string) {
     try {
       const user = await this.findOneById(userId);
-      const authenticated = await bcrypt.compare(
-        refreshToken,
-        user.refreshToken,
-      );
+      const authenticated = await compare(refreshToken, user.refreshToken);
       if (authenticated) {
         throw new UnauthorizedException();
       }
