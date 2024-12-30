@@ -26,7 +26,7 @@ export class CliffNotesController {
     return this.cliffNotesService.create(createCliffNoteDto, userId);
   }
 
-  @Get(':notebookId')
+  @Get('/notebook/:notebookId')
   findAll(
     @Param('notebookId') notebookId: string,
     @CurrentUserId() userId: string,

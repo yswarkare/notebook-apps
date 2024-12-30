@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCliffNoteDto } from './dto/create-cliff-note.dto';
-import { UpdateCliffNoteDto } from './dto/update-cliff-note.dto';
+import { CreateArticleDto } from './dto/create-article.dto';
+import { UpdateArticleDto } from './dto/update-article.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { CliffNoteTagsDto } from './dto/cliff-note-tags.dto';
 import { TagService } from '../tag/tag.service';
 import { RefurlService } from '../refurl/refurl.service';
-import { CliffNoteRefUrlsDto } from './dto/cliff-note-refUrls.dto';
+import { ArticleRefUrlsDto } from './dto/article-refUrls.dto';
+import { ArticleTagsDto } from './dto/article-tags.dto';
 
 @Injectable()
-export class CliffNotesService {
+export class ArticlesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly tagService: TagService,
@@ -16,7 +16,7 @@ export class CliffNotesService {
   ) {}
 
   private async getNewOrderId(notebookId: string, userId: string) {
-    const prevOrderId = await this.prisma.cliffNotes.aggregate({
+    const prevOrderId = await this.prisma.article.aggregate({
       where: {
         notebookId: notebookId,
         createdBy: userId,
@@ -29,17 +29,16 @@ export class CliffNotesService {
     return prevOrderId._max.orderId + 1;
   }
 
-  async create(createCliffNoteDto: CreateCliffNoteDto, userId: string) {
+  async create(createArticleDto: CreateArticleDto, userId: string) {
     const orderId = await this.getNewOrderId(
-      createCliffNoteDto.notebookId,
+      createArticleDto.notebookId,
       userId,
     );
-    return await this.prisma.cliffNotes.create({
+    return this.prisma.article.create({
       data: {
-        name: createCliffNoteDto.name,
-        content: createCliffNoteDto.content,
-        notebookId: createCliffNoteDto.notebookId,
-        orderId: orderId,
+        orderId,
+        name: createArticleDto.name,
+        notebookId: createArticleDto.notebookId,
         createdBy: userId,
         updatedBy: userId,
       },
@@ -47,42 +46,37 @@ export class CliffNotesService {
   }
 
   async findAll(notebookId: string, userId: string) {
-    return await this.prisma.cliffNotes.findMany({
+    return await this.prisma.article.findMany({
       where: { notebookId, createdBy: userId },
     });
   }
 
   async findOne(id: string, userId: string) {
-    return await this.prisma.cliffNotes.findUnique({
+    return await this.prisma.article.findUnique({
       where: { id, createdBy: userId },
     });
   }
 
-  async update(updateCliffNoteDto: UpdateCliffNoteDto, userId: string) {
-    return await this.prisma.cliffNotes.update({
-      where: {
-        id: updateCliffNoteDto.id,
-        createdBy: userId,
-      },
+  async update(updateArticleDto: UpdateArticleDto, userId: string) {
+    return await this.prisma.article.update({
+      where: { id: updateArticleDto.id, createdBy: userId },
       data: {
-        name: updateCliffNoteDto.name,
-        orderId: updateCliffNoteDto.orderId,
-        content: updateCliffNoteDto.content,
-        notebookId: updateCliffNoteDto.notebookId,
-        updatedBy: userId,
+        name: updateArticleDto.name,
+        notebookId: updateArticleDto.notebookId,
+        orderId: updateArticleDto.orderId,
       },
     });
   }
 
-  async updateTags(cliffNoteTagsDto: CliffNoteTagsDto, userId: string) {
-    if (cliffNoteTagsDto.tags.length > 0 && cliffNoteTagsDto.tags.length < 30) {
+  async updateTags(articleTagsDto: ArticleTagsDto, userId: string) {
+    if (articleTagsDto.tags.length > 0 && articleTagsDto.tags.length < 30) {
       const tagsList = await this.tagService.createTags(
-        cliffNoteTagsDto.tags,
+        articleTagsDto.tags,
         userId,
       );
-      return await this.prisma.cliffNotes.update({
+      return await this.prisma.article.update({
         where: {
-          id: cliffNoteTagsDto.id,
+          id: articleTagsDto.id,
           createdBy: userId,
         },
         data: {
@@ -99,21 +93,18 @@ export class CliffNotesService {
     }
   }
 
-  async updateRefUrls(
-    cliffNoteRefUrlsDto: CliffNoteRefUrlsDto,
-    userId: string,
-  ) {
+  async updateRefUrls(articleRefUrlsDto: ArticleRefUrlsDto, userId: string) {
     if (
-      cliffNoteRefUrlsDto.refUrls.length > 0 &&
-      cliffNoteRefUrlsDto.refUrls.length < 30
+      articleRefUrlsDto.refUrls.length > 0 &&
+      articleRefUrlsDto.refUrls.length < 30
     ) {
       const refUrlsList = await this.refurlService.createRefUrls(
-        cliffNoteRefUrlsDto.refUrls,
+        articleRefUrlsDto.refUrls,
         userId,
       );
-      return await this.prisma.cliffNotes.update({
+      return await this.prisma.article.update({
         where: {
-          id: cliffNoteRefUrlsDto.id,
+          id: articleRefUrlsDto.id,
           createdBy: userId,
         },
         data: {
@@ -131,7 +122,7 @@ export class CliffNotesService {
   }
 
   remove(id: string, userId: string) {
-    return this.prisma.cliffNotes.delete({
+    return this.prisma.article.delete({
       where: {
         id: id,
         createdBy: userId,

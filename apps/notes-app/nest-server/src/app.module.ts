@@ -11,6 +11,8 @@ import { NotebookModule } from './notebook/notebook.module';
 import { TagModule } from './tag/tag.module';
 import { RefurlModule } from './refurl/refurl.module';
 import { CliffNotesModule } from './cliff-notes/cliff-notes.module';
+import { ArticlesModule } from './articles/articles.module';
+import { SectionModule } from './section/section.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { CliffNotesModule } from './cliff-notes/cliff-notes.module';
     TagModule,
     RefurlModule,
     CliffNotesModule,
+    ArticlesModule,
+    SectionModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

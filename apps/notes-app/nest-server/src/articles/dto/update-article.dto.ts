@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateCliffNoteDto } from './create-cliff-note.dto';
+import { CreateArticleDto } from './create-article.dto';
 import {
   IsAlphanumeric,
   IsNotEmpty,
@@ -12,7 +12,7 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
-export class UpdateCliffNoteDto extends PartialType(CreateCliffNoteDto) {
+export class UpdateArticleDto extends PartialType(CreateArticleDto) {
   @IsNotEmpty()
   @IsString()
   @IsAlphanumeric()
