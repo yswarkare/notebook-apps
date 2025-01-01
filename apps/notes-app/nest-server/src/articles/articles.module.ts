@@ -9,7 +9,8 @@ import { RefurlService } from '../refurl/refurl.service';
 import { TagService } from '../tag/tag.service';
 
 @Module({
-  controllers: [ArticlesController, PrismaModule, TagModule, RefurlModule],
+  imports: [PrismaModule, TagModule, RefurlModule],
+  controllers: [ArticlesController],
   providers: [ArticlesService, PrismaService, TagService, RefurlService],
 })
 export class ArticlesModule {}

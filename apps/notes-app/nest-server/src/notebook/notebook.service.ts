@@ -4,9 +4,9 @@ import { UpdateNotebookDto } from './dto/update-notebook.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Notebook } from '@prisma/client';
 import { TagService } from 'src/tag/tag.service';
-import { NotebookTagsDto } from './dto/notebook-tags.dto';
-import { NotebookRefUrlsDto } from './dto/notebook-refUrls.dto';
 import { RefurlService } from '../refurl/refurl.service';
+import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
+import { TagsListDto } from '../dtos/tags-list.dto';
 
 @Injectable()
 export class NotebookService {
@@ -18,12 +18,8 @@ export class NotebookService {
 
   private async getNewOrderId(userId: string) {
     const prevOrderId = await this.prisma.notebook.aggregate({
-      where: {
-        userId: userId,
-      },
-      _max: {
-        orderId: true,
-      },
+      where: { userId: userId },
+      _max: { orderId: true },
     });
     if (!prevOrderId._max.orderId) return 1;
     return prevOrderId._max.orderId + 1;
@@ -87,15 +83,15 @@ export class NotebookService {
     });
   }
 
-  async updateTags(notebookTagsDto: NotebookTagsDto, userId: string) {
-    if (notebookTagsDto.tags.length > 0 && notebookTagsDto.tags.length < 30) {
+  async updateTags(tagsListDto: TagsListDto, userId: string) {
+    if (tagsListDto.tags.length > 0 && tagsListDto.tags.length < 30) {
       const tagsList = await this.tagService.createTags(
-        notebookTagsDto.tags,
+        tagsListDto.tags,
         userId,
       );
       return await this.prisma.notebook.update({
         where: {
-          id: notebookTagsDto.id,
+          id: tagsListDto.id,
           userId: userId,
         },
         data: {
@@ -112,18 +108,15 @@ export class NotebookService {
     }
   }
 
-  async updateRefUrls(notebookRefUrlsDto: NotebookRefUrlsDto, userId: string) {
-    if (
-      notebookRefUrlsDto.refUrls.length > 0 &&
-      notebookRefUrlsDto.refUrls.length < 30
-    ) {
+  async updateRefUrls(refUrlsDto: RefUrlsListDto, userId: string) {
+    if (refUrlsDto.refUrls.length > 0 && refUrlsDto.refUrls.length < 30) {
       const refUrlsList = await this.refurlService.createRefUrls(
-        notebookRefUrlsDto.refUrls,
+        refUrlsDto.refUrls,
         userId,
       );
       return await this.prisma.notebook.update({
         where: {
-          id: notebookRefUrlsDto.id,
+          id: refUrlsDto.id,
           userId: userId,
         },
         data: {

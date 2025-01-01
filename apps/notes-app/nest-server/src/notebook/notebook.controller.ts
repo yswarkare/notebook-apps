@@ -11,8 +11,8 @@ import { NotebookService } from './notebook.service';
 import { CreateNotebookDto } from './dto/create-notebook.dto';
 import { UpdateNotebookDto } from './dto/update-notebook.dto';
 import { CurrentUserId } from 'src/auth/current-user-id.decorator';
-import { NotebookRefUrlsDto } from './dto/notebook-refUrls.dto';
-import { NotebookTagsDto } from './dto/notebook-tags.dto';
+import { TagsListDto } from '../dtos/tags-list.dto';
+import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
 
 @Controller('notebook')
 export class NotebookController {
@@ -46,18 +46,18 @@ export class NotebookController {
 
   @Patch('/tags')
   async updateTags(
-    @Body() notebookTags: NotebookTagsDto,
+    @Body() tagsList: TagsListDto,
     @CurrentUserId() userId: string,
   ) {
-    return await this.notebookService.updateTags(notebookTags, userId);
+    return await this.notebookService.updateTags(tagsList, userId);
   }
 
   @Patch('/ref-urls')
   async updateRefUrls(
-    @Body() NotebookRefUrlsDto: NotebookRefUrlsDto,
+    @Body() refUrlsList: RefUrlsListDto,
     @CurrentUserId() userId: string,
   ) {
-    return await this.notebookService.updateRefUrls(NotebookRefUrlsDto, userId);
+    return await this.notebookService.updateRefUrls(refUrlsList, userId);
   }
 
   @Delete(':id')

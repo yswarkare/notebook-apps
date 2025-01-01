@@ -11,8 +11,8 @@ import { CliffNotesService } from './cliff-notes.service';
 import { CreateCliffNoteDto } from './dto/create-cliff-note.dto';
 import { UpdateCliffNoteDto } from './dto/update-cliff-note.dto';
 import { CurrentUserId } from '../auth/current-user-id.decorator';
-import { CliffNoteTagsDto } from './dto/cliff-note-tags.dto';
-import { CliffNoteRefUrlsDto } from './dto/cliff-note-refUrls.dto';
+import { TagsListDto } from '../dtos/tags-list.dto';
+import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
 
 @Controller('cliff-notes')
 export class CliffNotesController {
@@ -48,19 +48,16 @@ export class CliffNotesController {
   }
 
   @Patch('/tags')
-  updateTags(
-    @Body() cliffNoteTagsDto: CliffNoteTagsDto,
-    @CurrentUserId() userId: string,
-  ) {
-    return this.cliffNotesService.updateTags(cliffNoteTagsDto, userId);
+  updateTags(@Body() tagsList: TagsListDto, @CurrentUserId() userId: string) {
+    return this.cliffNotesService.updateTags(tagsList, userId);
   }
 
   @Patch('/ref-urls')
   updateRefUrls(
-    @Body() cliffNoteRefUrlsDto: CliffNoteRefUrlsDto,
+    @Body() refUrlsList: RefUrlsListDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.cliffNotesService.updateRefUrls(cliffNoteRefUrlsDto, userId);
+    return this.cliffNotesService.updateRefUrls(refUrlsList, userId);
   }
 
   @Delete(':id')

@@ -12,7 +12,7 @@ export class CreateArticleDto {
   @IsString()
   @Transform(({ value }) => value.trim())
   @Length(2, 255, {
-    message: 'notebook name must be between 2 and 255 characters',
+    message: 'article name must be between 2 and 255 characters',
   })
   readonly name: string;
 

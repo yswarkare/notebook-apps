@@ -6,7 +6,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
   imports: [PrismaModule],
-  controllers: [RefurlController, PrismaModule],
+  controllers: [RefurlController],
   providers: [RefurlService, PrismaService],
 })
 export class RefurlModule {}

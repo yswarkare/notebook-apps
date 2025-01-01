@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateCliffNoteDto } from './dto/create-cliff-note.dto';
 import { UpdateCliffNoteDto } from './dto/update-cliff-note.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { CliffNoteTagsDto } from './dto/cliff-note-tags.dto';
 import { TagService } from '../tag/tag.service';
 import { RefurlService } from '../refurl/refurl.service';
-import { CliffNoteRefUrlsDto } from './dto/cliff-note-refUrls.dto';
+import { TagsListDto } from '../dtos/tags-list.dto';
+import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
 
 @Injectable()
 export class CliffNotesService {
@@ -74,15 +74,15 @@ export class CliffNotesService {
     });
   }
 
-  async updateTags(cliffNoteTagsDto: CliffNoteTagsDto, userId: string) {
-    if (cliffNoteTagsDto.tags.length > 0 && cliffNoteTagsDto.tags.length < 30) {
+  async updateTags(TagsListDto: TagsListDto, userId: string) {
+    if (TagsListDto.tags.length > 0 && TagsListDto.tags.length < 30) {
       const tagsList = await this.tagService.createTags(
-        cliffNoteTagsDto.tags,
+        TagsListDto.tags,
         userId,
       );
       return await this.prisma.cliffNotes.update({
         where: {
-          id: cliffNoteTagsDto.id,
+          id: TagsListDto.id,
           createdBy: userId,
         },
         data: {
@@ -99,21 +99,15 @@ export class CliffNotesService {
     }
   }
 
-  async updateRefUrls(
-    cliffNoteRefUrlsDto: CliffNoteRefUrlsDto,
-    userId: string,
-  ) {
-    if (
-      cliffNoteRefUrlsDto.refUrls.length > 0 &&
-      cliffNoteRefUrlsDto.refUrls.length < 30
-    ) {
+  async updateRefUrls(refUrlsDto: RefUrlsListDto, userId: string) {
+    if (refUrlsDto.refUrls.length > 0 && refUrlsDto.refUrls.length < 30) {
       const refUrlsList = await this.refurlService.createRefUrls(
-        cliffNoteRefUrlsDto.refUrls,
+        refUrlsDto.refUrls,
         userId,
       );
       return await this.prisma.cliffNotes.update({
         where: {
-          id: cliffNoteRefUrlsDto.id,
+          id: refUrlsDto.id,
           createdBy: userId,
         },
         data: {

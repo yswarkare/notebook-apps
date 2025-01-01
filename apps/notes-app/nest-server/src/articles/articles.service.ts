@@ -4,8 +4,8 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { TagService } from '../tag/tag.service';
 import { RefurlService } from '../refurl/refurl.service';
-import { ArticleRefUrlsDto } from './dto/article-refUrls.dto';
-import { ArticleTagsDto } from './dto/article-tags.dto';
+import { TagsListDto } from '../dtos/tags-list.dto';
+import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -68,7 +68,7 @@ export class ArticlesService {
     });
   }
 
-  async updateTags(articleTagsDto: ArticleTagsDto, userId: string) {
+  async updateTags(articleTagsDto: TagsListDto, userId: string) {
     if (articleTagsDto.tags.length > 0 && articleTagsDto.tags.length < 30) {
       const tagsList = await this.tagService.createTags(
         articleTagsDto.tags,
@@ -93,7 +93,7 @@ export class ArticlesService {
     }
   }
 
-  async updateRefUrls(articleRefUrlsDto: ArticleRefUrlsDto, userId: string) {
+  async updateRefUrls(articleRefUrlsDto: RefUrlsListDto, userId: string) {
     if (
       articleRefUrlsDto.refUrls.length > 0 &&
       articleRefUrlsDto.refUrls.length < 30

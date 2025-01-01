@@ -11,6 +11,8 @@ import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { CurrentUserId } from '../auth/current-user-id.decorator';
+import { TagsListDto } from '../dtos/tags-list.dto';
+import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -43,6 +45,22 @@ export class ArticlesController {
     @CurrentUserId() userId: string,
   ) {
     return this.articlesService.update(updateArticleDto, userId);
+  }
+
+  @Patch('/tags')
+  async updateTags(
+    @Body() tagsList: TagsListDto,
+    @CurrentUserId() userId: string,
+  ) {
+    return await this.articlesService.updateTags(tagsList, userId);
+  }
+
+  @Patch('/ref-urls')
+  async updateRefUrls(
+    @Body() refUrlsList: RefUrlsListDto,
+    @CurrentUserId() userId: string,
+  ) {
+    return await this.articlesService.updateTags(refUrlsList, userId);
   }
 
   @Delete(':id')
