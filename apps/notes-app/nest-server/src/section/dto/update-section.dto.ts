@@ -1,7 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateSectionDto } from './create-section.dto';
 import {
-  IsAlphanumeric,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -15,7 +14,6 @@ import { Transform } from 'class-transformer';
 export class UpdateSectionDto extends PartialType(CreateSectionDto) {
   @IsNotEmpty()
   @IsString()
-  @IsAlphanumeric()
   @Transform(({ value }) => value.trim())
   @Length(2, 50, {
     message: 'section id must be between 2 and 50 characters',

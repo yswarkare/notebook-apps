@@ -6,13 +6,13 @@ type Props = {
   tags: Array<TagType>
 }
 
-const TagsList = ({ tags }: Props) => {
+const TagsList = ({ tags = [] }: Props) => {
   return (
     <div className="w-full flex flex-col justify-center items-center">
       <div className="w-full gap-3 flex flex-row justify-center items-center">
-      <IconButton icon="tags" />
+        <IconButton icon="tags" />
         {
-          tags.map(({ id, name }) => (
+          tags?.length > 0 && tags.map(({ id, name }) => (
             <button className="badge badge-accent badge-outline badge-lg" type="button">
               <div key={id} className="flex gap-1 flex-row justify-center items-center">
                 <LabelOutlined />

@@ -7,13 +7,10 @@ import NotebookList from "../../components/NotebookList/NotebookList";
 import { NotebookType } from "../../models/notebook.model";
 
 const ListNotebooks = () => {
-  const { error, value, loading, callApi } = useApiCall<null, Array<NotebookType> >()
+  const { error, value, loading, callApi } = useApiCall<null, Array<NotebookType>>()
 
   useEffect(() => {
     callApi(NotebookService.getNotebookList, null)
-    return () => {
-
-    };
   }, []);
 
   return (

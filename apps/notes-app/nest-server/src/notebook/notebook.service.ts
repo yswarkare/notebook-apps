@@ -7,6 +7,7 @@ import { TagService } from 'src/tag/tag.service';
 import { RefurlService } from '../refurl/refurl.service';
 import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
 import { TagsListDto } from '../dtos/tags-list.dto';
+import { AddTagDto } from '../dtos/add-tag.dto';
 
 @Injectable()
 export class NotebookService {
@@ -26,6 +27,7 @@ export class NotebookService {
   }
 
   async create(createNotebookDto: CreateNotebookDto, userId: string) {
+    console.log({ userId });
     const notebook = await this.findByNameAndUserId(
       createNotebookDto.name,
       userId,
@@ -64,9 +66,17 @@ export class NotebookService {
     });
   }
 
+  async findNotebookTags(notebookId: string, userId: string) {
+    return await this.prisma.notebook.findUnique({
+      where: { id: notebookId, userId },
+      select: { tags: true, refUrls: true },
+    });
+  }
+
   async findOne(id: string, userId: string) {
     return await this.prisma.notebook.findUnique({
       where: { id, userId },
+      select: { id: true, name: true },
     });
   }
 
@@ -78,7 +88,32 @@ export class NotebookService {
       },
       data: {
         name: updateNotebookDto.name,
-        orderId: updateNotebookDto.orderId,
+      },
+    });
+  }
+
+  async addNotebookTag(addTagDto: AddTagDto, userId: string) {
+    const newTag = await this.tagService.findByTagNameAndUserId(
+      addTagDto.tag.name,
+      userId,
+    );
+    return await this.prisma.notebook.update({
+      where: {
+        id: addTagDto.id,
+        userId,
+      },
+      data: {
+        tags: {
+          connectOrCreate: {
+            where: { id: newTag.id },
+            create: {
+              name: addTagDto.tag.name,
+              id: newTag.id,
+              createdBy: userId,
+              updatedBy: userId,
+            },
+          },
+        },
       },
     });
   }

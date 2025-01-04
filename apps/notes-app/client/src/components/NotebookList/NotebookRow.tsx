@@ -12,7 +12,7 @@ import path from "../../routes/path";
 import IconButton from "../BootstrapIcons/IconButton";
 
 const notebookProps = {
-  title: '',
+  name: '',
 }
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
   index: number
 }
 
-const NotebookRow = ({ notebook: { id, title }, index }: Props) => {
+const NotebookRow = ({ notebook: { id, name }, index }: Props) => {
   const { control, handleSubmit, formState: { isValid, errors, touchedFields: touched, }, reset } = useForm<NotebookType>({
     resolver: yupResolver<NotebookType>(notebookSchema),
   });
@@ -61,7 +61,7 @@ const NotebookRow = ({ notebook: { id, title }, index }: Props) => {
                 id={key}
                 position="left"
                 key={key}
-                defaultValue={title}
+                defaultValue={name}
                 disabled={loading}
                 error={(touched?.[key] && errors?.[key]?.message)}
                 {...field}
@@ -69,7 +69,7 @@ const NotebookRow = ({ notebook: { id, title }, index }: Props) => {
             )}
           />
         ))
-        : title}
+        : name}
       </td>
       <td></td>
       <td>

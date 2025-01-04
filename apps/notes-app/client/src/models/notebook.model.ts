@@ -1,19 +1,27 @@
 import { object, string } from 'yup';
+import { TagType } from './tags.model';
 
 export const notebookSchema = object({
-  id: string().trim().required(),
-	title: string().min(3).max(255).trim().required()
-})
+	id: string().trim(),
+	name: string().min(3).max(255).trim().required(),
+});
 
 export type NotebookType = {
 	id: string;
-	title: string;
+	name: string;
 };
 
 export const createNotebookSchema = object({
-	title: string().min(3).max(255).trim().required()
-})
+	name: string().min(3).max(255).trim().required(),
+});
 
 export type CreateNotebookType = {
-	title: string;
+	name: string;
 };
+
+export type NotebookTagsAndRefs = {
+	tags: Array<TagType>;
+	refUrls: Array<object>;
+};
+
+

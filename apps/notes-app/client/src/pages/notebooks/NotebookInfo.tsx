@@ -11,18 +11,10 @@ function NotebookInfo() {
   const { value, error, loading, callApi } = useApiCall<string, NotebookType>()
   const params = useParams()
 
-  const getNotebook = async () => {
-    try {
-      if (params?.notebookId) {
-        await callApi(NotebookService.getNotebook, params?.notebookId)
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   useEffect(() => {
-    getNotebook()
+    if (params?.notebookId) {
+      callApi(NotebookService.getNotebook, params?.notebookId)
+    }
   }, [])
 
   return (

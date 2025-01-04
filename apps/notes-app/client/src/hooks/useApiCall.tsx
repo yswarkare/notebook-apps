@@ -16,7 +16,7 @@ function useApiCall<T, D>() {
       setValue(undefined);
       const res: AxiosResponse = await func(body);
       console.log({ res })
-      const data = await res.data?.data;
+      const data = await res.data;
       setValue(data);
     } catch (err) {
       if (err instanceof AxiosError) setError(err);

@@ -3,7 +3,7 @@ import { object, string } from 'yup';
 export type TagType = {
 	id: string;
 	name: string;
-	notebookId: string
+	notebookId: string;
 };
 
 export const tagSchema = object({
@@ -14,12 +14,17 @@ export const tagSchema = object({
 
 export type CreateTagType = {
 	name: string;
-	notebookId?: string
+	notebookId?: string;
+};
+
+export type CreateTagFor = {
+	id?: string;
+	tag: {
+		name: string;
+	};
 };
 
 export const createTagSchema = object({
 	name: string().max(255).trim().required(),
 	notebookId: string().max(255).trim(),
 });
-
-

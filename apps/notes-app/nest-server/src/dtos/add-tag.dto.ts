@@ -1,15 +1,8 @@
-import {
-  ArrayMaxSize,
-  ArrayNotEmpty,
-  IsNotEmpty,
-  IsString,
-  IsUUID,
-  Length,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { CreateTagDto } from '../tag/dto/create-tag.dto';
 
-export class TagsListDto {
+export class AddTagDto {
   @IsNotEmpty()
   @IsString()
   @Transform(({ value }) => value.trim())
@@ -17,7 +10,6 @@ export class TagsListDto {
   @IsUUID()
   readonly id: string;
 
-  @ArrayNotEmpty()
-  @ArrayMaxSize(30)
-  readonly tags?: Array<CreateTagDto>;
+  @IsNotEmpty()
+  readonly tag?: CreateTagDto;
 }

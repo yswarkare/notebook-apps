@@ -19,32 +19,32 @@ export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
-  create(
+  async create(
     @Body() createArticleDto: CreateArticleDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.articlesService.create(createArticleDto, userId);
+    return await this.articlesService.create(createArticleDto, userId);
   }
 
   @Get('/notebook/:notebookId')
-  findAll(
+  async findAll(
     @Param('notebookId') notebookId: string,
     @CurrentUserId() userId: string,
   ) {
-    return this.articlesService.findAll(notebookId, userId);
+    return await this.articlesService.findAll(notebookId, userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUserId() userId: string) {
-    return this.articlesService.findOne(id, userId);
+  async findOne(@Param('id') id: string, @CurrentUserId() userId: string) {
+    return await this.articlesService.findOne(id, userId);
   }
 
   @Patch()
-  update(
+  async update(
     @Body() updateArticleDto: UpdateArticleDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.articlesService.update(updateArticleDto, userId);
+    return await this.articlesService.update(updateArticleDto, userId);
   }
 
   @Patch('/tags')
@@ -64,7 +64,7 @@ export class ArticlesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @CurrentUserId() userId: string) {
-    return this.articlesService.remove(id, userId);
+  async remove(@Param('id') id: string, @CurrentUserId() userId: string) {
+    return await this.articlesService.remove(id, userId);
   }
 }

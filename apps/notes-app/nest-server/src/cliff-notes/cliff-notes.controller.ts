@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CliffNotesService } from './cliff-notes.service';
 import { CreateCliffNoteDto } from './dto/create-cliff-note.dto';
@@ -13,55 +14,60 @@ import { UpdateCliffNoteDto } from './dto/update-cliff-note.dto';
 import { CurrentUserId } from '../auth/current-user-id.decorator';
 import { TagsListDto } from '../dtos/tags-list.dto';
 import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
+import { JwtAuthGuard } from '../token/guards/jwt-auth.guard';
 
 @Controller('cliff-notes')
+@UseGuards(JwtAuthGuard)
 export class CliffNotesController {
   constructor(private readonly cliffNotesService: CliffNotesService) {}
 
   @Post()
-  create(
+  async create(
     @Body() createCliffNoteDto: CreateCliffNoteDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.cliffNotesService.create(createCliffNoteDto, userId);
+    return await this.cliffNotesService.create(createCliffNoteDto, userId);
   }
 
   @Get('/notebook/:notebookId')
-  findAll(
+  async findAll(
     @Param('notebookId') notebookId: string,
     @CurrentUserId() userId: string,
   ) {
-    return this.cliffNotesService.findAll(notebookId, userId);
+    return await this.cliffNotesService.findAll(notebookId, userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUserId() userId: string) {
-    return this.cliffNotesService.findOne(id, userId);
+  async findOne(@Param('id') id: string, @CurrentUserId() userId: string) {
+    return await this.cliffNotesService.findOne(id, userId);
   }
 
   @Patch()
-  update(
+  async update(
     @Body() updateCliffNoteDto: UpdateCliffNoteDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.cliffNotesService.update(updateCliffNoteDto, userId);
+    return await this.cliffNotesService.update(updateCliffNoteDto, userId);
   }
 
   @Patch('/tags')
-  updateTags(@Body() tagsList: TagsListDto, @CurrentUserId() userId: string) {
-    return this.cliffNotesService.updateTags(tagsList, userId);
+  async updateTags(
+    @Body() tagsList: TagsListDto,
+    @CurrentUserId() userId: string,
+  ) {
+    return await this.cliffNotesService.updateTags(tagsList, userId);
   }
 
   @Patch('/ref-urls')
-  updateRefUrls(
+  async updateRefUrls(
     @Body() refUrlsList: RefUrlsListDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.cliffNotesService.updateRefUrls(refUrlsList, userId);
+    return await this.cliffNotesService.updateRefUrls(refUrlsList, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @CurrentUserId() userId: string) {
-    return this.cliffNotesService.remove(id, userId);
+  async remove(@Param('id') id: string, @CurrentUserId() userId: string) {
+    return await this.cliffNotesService.remove(id, userId);
   }
 }

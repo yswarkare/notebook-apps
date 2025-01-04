@@ -2,12 +2,12 @@ import { useState } from "react";
 import BootstrapIcon from "../BootstrapIcons/BootstrapIcon";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createTagSchema, CreateTagType, TagType } from '../../models/tags.model';
+import { CreateTagFor, createTagSchema, CreateTagType, TagType } from '../../models/tags.model';
 import useApiCall from "../../hooks/useApiCall";
-import TagService from "../../services/TagService";
 import { InputUi } from "yw-daisyui";
 import { BlocksShuffle, DotsMove } from "yw-icons";
 import ApiError from "../ApiError";
+import NotebookService from "../../services/notebook.service";
 
 const tagProps = {
   name: "Name"
@@ -22,15 +22,16 @@ const CreateTag = ({ notebookId }: Props) => {
   const { control, handleSubmit, formState: { isValid, errors, touchedFields: touched, }, reset } = useForm<CreateTagType>({
     resolver: yupResolver<CreateTagType>(createTagSchema),
   });
-  const { error, loading, callApi } = useApiCall<CreateTagType, TagType>()
+  const { error, loading, callApi } = useApiCall<CreateTagFor, TagType>()
 
   const submitHandler = async (data: CreateTagType) => {
     try {
       console.log(data)
       if (isValid) {
         console.log({ isValid, data })
-        await callApi(TagService.creteTag, { ...data, notebookId })
+        await callApi(NotebookService.createNotebookTags, { tag: data, id: notebookId })
         reset()
+        setShowInput(false)
       }
     } catch (error) {
       console.log(error)

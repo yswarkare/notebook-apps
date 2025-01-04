@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
 
-export class CreateSectionDto {
+export class CreateQuestionDto {
   @IsNotEmpty()
   @IsString()
   @Transform(({ value }) => value.trim())
@@ -23,5 +23,13 @@ export class CreateSectionDto {
   @Length(2, 20000, {
     message: 'section name must be between 2 and 20000 characters',
   })
-  readonly content: string;
+  readonly question: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Transform(({ value }) => value.trim())
+  @Length(2, 20000, {
+    message: 'section name must be between 2 and 20000 characters',
+  })
+  readonly answer: string;
 }

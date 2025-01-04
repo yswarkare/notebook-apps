@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateArticleDto } from './create-article.dto';
+import { CreateQuestionDto } from './create-question.dto';
 import {
   IsNotEmpty,
   IsNumber,
@@ -11,12 +11,12 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
-export class UpdateArticleDto extends PartialType(CreateArticleDto) {
+export class UpdateQuestionDto extends PartialType(CreateQuestionDto) {
   @IsNotEmpty()
   @IsString()
   @Transform(({ value }) => value.trim())
   @Length(2, 50, {
-    message: 'cliff note id must be between 2 and 50 characters',
+    message: 'section id must be between 2 and 50 characters',
   })
   @IsUUID()
   readonly id: string;

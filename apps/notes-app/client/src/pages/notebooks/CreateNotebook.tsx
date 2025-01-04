@@ -10,7 +10,7 @@ import ApiError from "../../components/ApiError";
 import { CreateNotebookType, notebookSchema, NotebookType } from "../../models/notebook.model";
 
 const notebookProps = {
-  title: 'Title',
+  name: 'Name',
 }
 
 function CreateNotebook() {

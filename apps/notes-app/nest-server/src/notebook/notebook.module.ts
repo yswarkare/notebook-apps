@@ -7,10 +7,19 @@ import { TagModule } from '../tag/tag.module';
 import { TagService } from '../tag/tag.service';
 import { RefurlModule } from '../refurl/refurl.module';
 import { RefurlService } from '../refurl/refurl.service';
+import { JwtStrategy } from '../token/strategies/jwt.strategy';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [PrismaModule, TagModule, RefurlModule],
   controllers: [NotebookController],
-  providers: [NotebookService, PrismaService, TagService, RefurlService],
+  providers: [
+    NotebookService,
+    PrismaService,
+    TagService,
+    RefurlService,
+    JwtStrategy,
+    UserService,
+  ],
 })
 export class NotebookModule {}

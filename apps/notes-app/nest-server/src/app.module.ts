@@ -13,6 +13,7 @@ import { RefurlModule } from './refurl/refurl.module';
 import { CliffNotesModule } from './cliff-notes/cliff-notes.module';
 import { ArticlesModule } from './articles/articles.module';
 import { SectionModule } from './section/section.module';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SectionModule } from './section/section.module';
     CliffNotesModule,
     ArticlesModule,
     SectionModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

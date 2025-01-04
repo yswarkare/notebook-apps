@@ -19,32 +19,32 @@ export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
   @Post()
-  create(
+  async create(
     @Body() createSectionDto: CreateSectionDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.sectionService.create(createSectionDto, userId);
+    return await this.sectionService.create(createSectionDto, userId);
   }
 
   @Get('/article/:articleId')
-  findAll(
+  async findAll(
     @Param('articleId') articleId: string,
     @CurrentUserId() userId: string,
   ) {
-    return this.sectionService.findAll(articleId, userId);
+    return await this.sectionService.findAll(articleId, userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUserId() userId: string) {
-    return this.sectionService.findOne(id, userId);
+  async findOne(@Param('id') id: string, @CurrentUserId() userId: string) {
+    return await this.sectionService.findOne(id, userId);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Body() updateSectionDto: UpdateSectionDto,
     @CurrentUserId() userId: string,
   ) {
-    return this.sectionService.update(updateSectionDto, userId);
+    return await this.sectionService.update(updateSectionDto, userId);
   }
 
   @Patch('/tags')
