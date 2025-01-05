@@ -43,6 +43,7 @@ export class AuthController {
     @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
+    console.log('/refresh');
     await this.authService.login(user, res);
     return null;
   }

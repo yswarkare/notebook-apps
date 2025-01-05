@@ -26,22 +26,23 @@ axiosInstance.interceptors.response.use(
 	(response) => {
 		console.log(response);
 		// Edit response config
-		if (response.status === 401 && response.statusText === 'Token is not valid.') {
-			(async () => {
-				await axiosInstance2
-					.post(`${process.env.VITE_BASE_API_URL}/api/auth/refresh`)
-					.then((res) => {
-						console.log(res);
-					})
-					.catch((err) => {
-						console.log(err);
-					});
-			})();
-		}
 		return response;
 	},
 	(error) => {
-		console.log(error);
+		console.log({ error });
+		const response = error.response;
+		console.log({ url: response?.config?.url });
+		if (response?.config?.url === 'api/auth/authenticate-token' && response.status === 401) {
+			axiosInstance2
+				.post(`${import.meta.env.VITE_BASE_API_URL}/api/auth/refresh`)
+				.then((res) => {
+					console.log(res);
+					history.back();
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 		return Promise.reject(error);
 	}
 );
