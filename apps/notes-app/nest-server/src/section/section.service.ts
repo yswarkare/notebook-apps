@@ -47,9 +47,24 @@ export class SectionService {
     });
   }
 
+  async findArticleSections(articleId: string, userId: string) {
+    return await this.prisma.section.findMany({
+      where: { articleId, createdBy: userId },
+      select: { id: true, name: true },
+    });
+  }
+
   async findOne(id: string, userId: string) {
     return await this.prisma.section.findUnique({
       where: { id, createdBy: userId },
+      select: {
+        id: true,
+        name: true,
+        orderId: true,
+        content: true,
+        tags: true,
+        refUrls: true,
+      },
     });
   }
 

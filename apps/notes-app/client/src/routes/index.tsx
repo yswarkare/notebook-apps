@@ -9,6 +9,7 @@ const About = lazy(async () => await import("../pages/About"));
 const Login = lazy(async () => await import("../pages/Login"));
 const Signup = lazy(async () => await import("../pages/Signup"));
 const ErrorPage = lazy(async () => await import("../pages/error/ErrorPage"));
+const ArticlePage = lazy(async () => await import("../pages/article/ArticlePage"));
 const NotebooksDefault = lazy(async () => await import("../pages/notebooks/NotebooksDefault"));
 const ListNotebooks = lazy(async () => await import("../pages/notebooks/ListNotebooks"));
 const CreateNotebook = lazy(async () => await import('../pages/notebooks/CreateNotebook'));
@@ -37,6 +38,9 @@ const routes: Array<RouteObject> = [{
       path: path.notebook_pages.list,
       element: <ListNotebooks />
     }]
+  }, {
+    path: `${path.article_page}/:articleId`,
+    element: <ArticlePage />,
   }, {
     path: path.about,
     element: <About />,

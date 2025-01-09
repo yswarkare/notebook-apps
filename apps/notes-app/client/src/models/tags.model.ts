@@ -28,3 +28,8 @@ export const createTagSchema = object({
 	name: string().max(255).trim().required(),
 	notebookId: string().max(255).trim(),
 });
+
+export type TagsAndRefs = {
+  tags: Array<TagType>;
+  refUrls: Array<object>;
+};

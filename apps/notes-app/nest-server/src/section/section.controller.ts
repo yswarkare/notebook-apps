@@ -6,15 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { SectionService } from './section.service';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 import { CurrentUserId } from '../auth/current-user-id.decorator';
 import { TagsListDto } from '../dtos/tags-list.dto';
-import { RefUrlsListDto } from 'src/dtos/ref-urls-list.dto';
+import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
+import { JwtAuthGuard } from '../token/guards/jwt-auth.guard';
 
 @Controller('section')
+@UseGuards(JwtAuthGuard)
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
@@ -32,6 +35,14 @@ export class SectionController {
     @CurrentUserId() userId: string,
   ) {
     return await this.sectionService.findAll(articleId, userId);
+  }
+
+  @Get('/list/:articleId')
+  async findArticleSections(
+    @Param('articleId') articleId: string,
+    @CurrentUserId() userId: string,
+  ) {
+    return await this.sectionService.findArticleSections(articleId, userId);
   }
 
   @Get(':id')

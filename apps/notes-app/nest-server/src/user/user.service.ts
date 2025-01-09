@@ -94,7 +94,6 @@ export class UserService {
     try {
       const user = await this.findOneById(userId);
       const authenticated = await compare(refreshToken, user.refreshToken);
-      console.log({ authenticated });
       if (!authenticated) {
         throw new UnauthorizedException();
       }

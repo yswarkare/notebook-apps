@@ -7,6 +7,8 @@ import 'daisyui/dist/themes.css'
 import 'daisyui/dist/full.css'
 import "yw-daisyui/dist/assets/style.css"
 import "yw-icons/dist/assets/style.css"
+import 'highlight.js/styles/atom-one-dark.min.css'
+import './assets/css/main.css'
 import "bootstrap-icons/font/bootstrap-icons.min.css"
 import './index.css'
 

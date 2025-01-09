@@ -6,7 +6,7 @@ export const articleSchema = object({
 	name: string().min(3).max(255).trim().required(),
 });
 
-export const createCreateSchema = object({
+export const createArticleSchema = object({
 	name: string().min(3).max(255).trim().required(),
 });
 
@@ -18,6 +18,11 @@ export type ArticleTagsAndRefs = {
 
 export type ArticleType = {
 	id: string;
+	name: string;
+	notebookId: string;
+};
+
+export type CreateArticleType2 = {
 	name: string;
 	notebookId: string;
 };

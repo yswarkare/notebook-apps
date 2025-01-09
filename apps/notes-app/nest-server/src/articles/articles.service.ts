@@ -4,8 +4,8 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { TagService } from '../tag/tag.service';
 import { RefurlService } from '../refurl/refurl.service';
-import { TagsListDto } from '../dtos/tags-list.dto';
 import { RefUrlsListDto } from '../dtos/ref-urls-list.dto';
+import { AddTagDto } from '../dtos/add-tag.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -48,12 +48,20 @@ export class ArticlesService {
   async findAll(notebookId: string, userId: string) {
     return await this.prisma.article.findMany({
       where: { notebookId, createdBy: userId },
+      select: { id: true, name: true, notebookId: true, orderId: true },
     });
   }
 
   async findOne(id: string, userId: string) {
     return await this.prisma.article.findUnique({
       where: { id, createdBy: userId },
+    });
+  }
+
+  async findArticleTags(id: string, userId: string) {
+    return await this.prisma.article.findUnique({
+      where: { id, createdBy: userId },
+      select: { tags: true, refUrls: true },
     });
   }
 
@@ -68,29 +76,30 @@ export class ArticlesService {
     });
   }
 
-  async updateTags(articleTagsDto: TagsListDto, userId: string) {
-    if (articleTagsDto.tags.length > 0 && articleTagsDto.tags.length < 30) {
-      const tagsList = await this.tagService.createTags(
-        articleTagsDto.tags,
-        userId,
-      );
-      return await this.prisma.article.update({
-        where: {
-          id: articleTagsDto.id,
-          createdBy: userId,
-        },
-        data: {
-          tags: {
-            updateMany: {
-              where: {
-                createdBy: userId,
-              },
-              data: tagsList,
+  async createArticleTag(addTagDto: AddTagDto, userId: string) {
+    const newTag = await this.tagService.findByTagNameAndUserId(
+      addTagDto.tag.name,
+      userId,
+    );
+    return await this.prisma.article.update({
+      where: {
+        id: addTagDto.id,
+        createdBy: userId,
+      },
+      data: {
+        tags: {
+          connectOrCreate: {
+            where: { id: newTag.id },
+            create: {
+              name: addTagDto.tag.name,
+              id: newTag.id,
+              createdBy: userId,
+              updatedBy: userId,
             },
           },
         },
-      });
-    }
+      },
+    });
   }
 
   async updateRefUrls(articleRefUrlsDto: RefUrlsListDto, userId: string) {

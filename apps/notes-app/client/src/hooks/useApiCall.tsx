@@ -9,7 +9,7 @@ function useApiCall<T, D>() {
   const [error, setError] = useState<AxiosError>();
   const [value, setValue] = useState<D>();
 
-  async function callApi(func: (arg0: T) => Promise<AxiosResponse>, body: T) {
+  async function callApi(func: (arg0: T) => Promise<AxiosResponse<T, D>>, body: T) {
     try {
       setLoading(true);
       setError(undefined);

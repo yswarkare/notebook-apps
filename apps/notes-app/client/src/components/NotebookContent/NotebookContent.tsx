@@ -1,6 +1,7 @@
 import { NotebookType } from "../../models/notebook.model";
+import NotebookService from "../../services/notebook.service";
+import Tags from "../tags/Tags";
 import NotebookArticles from "./NotebookArticles";
-import NotebookTags from "./NotebookTags";
 
 type Props = {
   notebook: NotebookType
@@ -12,7 +13,7 @@ const NotebookContent = ({ notebook }: Props) => {
     <div className="w-full flex flex-col justify-center items-center">
       {notebook.name}
       <div className="w-full gap-8 flex flex-col justify-center items-center">
-        <NotebookTags notebookId={notebook.id} />
+        <Tags notebookId={notebook.id} getApi={NotebookService.getNotebookTags} createApi={NotebookService.createNotebookTags} />
       </div>
       <NotebookArticles notebookId={notebook.id} />
     </div>
