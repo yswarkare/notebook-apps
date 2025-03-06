@@ -15,19 +15,19 @@ function DefaultLayout() {
         sx={{
           display: 'flex',
           width: '100%',
+          minHeight: '70vh',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'start',
           bgcolor: 'background.default',
           color: 'text.primary',
           borderRadius: 1,
           p: 3,
-          minHeight: '56px',
         }}
       >
         <ThemeSelector />
         <Header />
-        <main className="w-full flex flex-col justify-center items-center content-center">
+        <main className="w-full min-h-[70vh] flex flex-col justify-center items-center content-center">
           <Suspense fallback={<PageLoader />}>
             <AuthRouter>
               <Outlet />

@@ -1,44 +1,44 @@
 import { createTheme, PaletteOptions } from '@mui/material';
 import { typography } from '../typography';
 
-const halloweenPalette: PaletteOptions = {
+const toastifyPalette: PaletteOptions = {
 	mode: 'dark',
 	common: {
     black: '#000',
     white: '#fff',
   },
 	primary: {
-		main: '#ffc5e6',
-		light: '#fce7f3',
-		dark: '#c093ad',
+		main: '#ba68c8',
+		light: '#ce93d8',
+		dark: '#ab47bc',
 		contrastText: '#161314',
 	},
 	secondary: {
-		main: '#FFDC7F',
-		light: '#ba68c8',
-		dark: '#7b1fa2',
+		main: '#26a69a',
+		light: '#4db6ac',
+		dark: '#009688',
 		contrastText: '#161106',
 	},
 	error: {
-		main: '#E4003A',
+		main: '#e74c3c',
 		light: '#ef5350',
 		dark: '#c62828',
 		contrastText: '#ffd8d6',
 	},
 	warning: {
-		main: '#FFB22C',
+		main: '#f1c40f',
 		light: '#ff9800',
 		dark: '#e65100',
 		contrastText: '#160c01',
 	},
 	info: {
-		main: '#0F67B1',
+		main: '#3498db',
 		light: '#03a9f4',
 		dark: '#01579b',
 		contrastText: '#d1e0f1',
 	},
 	success: {
-		main: '#399918',
+		main: '#07bc0c',
 		light: '#4caf50',
 		dark: '#1b5e20',
 		contrastText: '#010800',
@@ -84,7 +84,7 @@ const halloweenPalette: PaletteOptions = {
 	},
 };
 
-export const halloween = createTheme({
-	palette: halloweenPalette,
+export const toastifyTheme = createTheme({
+	palette: toastifyPalette,
 	typography,
 });

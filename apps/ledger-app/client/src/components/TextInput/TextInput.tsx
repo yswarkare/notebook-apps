@@ -74,6 +74,8 @@ export default function TextInput({ type, label, error, disabled, helperText, ..
           <TextField
             id="outlined-error-helper-text"
             type={type}
+            multiline={type === 'textarea' ? true : false}
+            minRows={type === 'textarea' ? 3 : 1}
             label={label}
             error={error}
             disabled={disabled}

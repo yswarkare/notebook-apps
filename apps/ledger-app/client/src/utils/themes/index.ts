@@ -4,6 +4,7 @@ import { lightTheme } from './themes/lightTheme';
 import { defaultTheme } from './theme';
 import { lightGreenTheme } from './themes/forest';
 import { cupcakeTheme } from './themes/cupcake';
+import { toastifyTheme } from './themes/tostify';
 
 export const customThemes = {
 	default: defaultTheme,
@@ -11,5 +12,6 @@ export const customThemes = {
 	light: lightTheme,
 	halloween: halloween,
 	forest: lightGreenTheme,
-	cupcake: cupcakeTheme
+	cupcake: cupcakeTheme,
+	toastify: toastifyTheme,
 };

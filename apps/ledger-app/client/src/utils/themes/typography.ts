@@ -26,6 +26,7 @@ export const typography: TypographyOptions = {
 		fontSize: '3.5rem',
 		lineHeight: 1.167,
 		letterSpacing: '-0.01562em',
+		color: "#eeff41",
 	},
 	h2: {
 		fontFamily: fonts.h2,

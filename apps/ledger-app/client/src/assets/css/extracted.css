@@ -16,4 +16,5 @@
 	--toastify-spinner-color-empty-area: #e0e0e0;
 	--toastify-color-progress-light: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55);
 	--toastify-color-progress-dark: #bb86fc;
+	--color-trial: rgba(255, 255, 255, 0.12);
 }
