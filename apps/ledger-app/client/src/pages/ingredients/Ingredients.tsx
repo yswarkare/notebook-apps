@@ -5,9 +5,16 @@ import { useSelector } from "react-redux";
 import CreateIngredients from "../../components/ingredients/create-ingredients";
 import IngredientsTable from "../../components/ingredients/ingredients-table";
 import ShowHide from "../../components/show-hide";
+import RoutedTabs from "../../components/Tabs/RoutedTabs";
+import { Outlet } from "react-router-dom";
+import path from "../../routes/path";
+
+const tabs = [
+  { label: 'Ingredients List', url: path.ingredient_pages.table },
+  { label: 'Create Ingredient', url: path.ingredient_pages.create },
+]
 
 const Ingredients = () => {
-  const loading = useSelector((state) => state.ingredients.loading);
   const error = useSelector((state) => state.ingredients.error);
 
   return (
@@ -27,16 +34,8 @@ const Ingredients = () => {
       }}
     >
       <Typography variant={'h1'}>Ingredients</Typography>
-      <IngredientsTable />
-      <ShowHide title={'Create Ingredient'}>
-        <CreateIngredients />
-      </ShowHide>
-      {
-        loading &&
-        <div className="absolute">
-          <BlocksShuffle size="3rem" />
-        </div>
-      }
+      <RoutedTabs id="ingredient" tabs={tabs} nestedLevel={2} />
+      <Outlet />
       {
         error! &&
         <ApiError error={error} />

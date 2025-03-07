@@ -5,23 +5,24 @@ import useApiCall from '../hooks/useApiCall';
 import { RingWithBg } from 'yw-icons'
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedIn } from '../store/slices/user';
+import RoutedTabs from "../components/tabs/RoutedTabs"
 
 const items1 = [
-  { label: 'Home', path: path.home },
-  { label: 'About', path: path.about },
+  { label: 'Home', url: path.home },
+  { label: 'About', url: path.about },
 ]
 
 const items2 = [
-  { label: 'Sign Up', path: path.signup },
-  { label: 'Log In', path: path.login },
+  { label: 'Sign Up', url: path.signup },
+  { label: 'Log In', url: path.login },
 ]
 
 const items3 = [
-  { label: 'Home', path: path.home },
-  { label: 'Ingredients', path: path.ingredients },
-  { label: 'Products', path: path.products },
-  { label: 'Inventory', path: path.inventory },
-  { label: 'About', path: path.about },
+  { label: 'Home', url: path.home },
+  { label: 'Ingredients', url: path.ingredients },
+  { label: 'Products', url: path.products },
+  { label: 'Inventory', url: path.inventory },
+  { label: 'About', url: path.about },
 ]
 
 const headerItems = (loggedIn: boolean) => !loggedIn ? [...items1, ...items2] : [...items3]
@@ -43,11 +44,12 @@ function Header() {
   }
   return (
     <div id='app-header' className="w-full flex flex-row justify-around items-center">
-      {
+      {/* {
         headerItems(isLoggedIn).map(({ label, path }) => (
           <Link to={path} key={path} className={`w-full hover:bg-secondary`}>{label}</Link>
         ))
-      }
+      } */}
+      <RoutedTabs id='app-header' tabs={headerItems(isLoggedIn)} nestedLevel={1} />
       {isLoggedIn && (
         <button type='button' className='min-w-max relative flex flex-col justify-center items-center' onClick={() => { logOut() }}>
           <span>Log Out</span>

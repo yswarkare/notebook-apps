@@ -5,16 +5,19 @@ const path = {
 	signup: '/signup',
 	about: '/about',
 	ingredients: '/ingredients',
+	ingredient_pages: {
+		default: '/ingredients/',
+		table: '/ingredients/table',
+		create: '/ingredients/create',
+	},
 	inventory: '/inventory',
 	products: '/products',
-	notebooks: '/notebooks',
-	notebook_pages: {
-		default: '/notebooks/',
-		create: '/notebooks/create',
-		list: '/notebooks/list',
-		notebook: '/notebooks/notebook',
+	product_pages: {
+		default: '/products/',
+		table: '/products/table',
+		page: '/products/product-page',
+		create: '/products/create',
 	},
-	article_page: '/article',
 };
 
 export default path;

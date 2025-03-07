@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { AxiosError, AxiosResponse } from 'axios';
-import IngredientService from '../../services/ingredient.service';
-import { CreateIngredientType, IngredientType } from '../../models/ingredient.model';
+import ProductService from '../../services/product.service';
+import { CreateProductType, ProductType } from '../../models/products.model';
 
 function createAsyncThunkHOC<D>(actionName: string, apiFunc: (data: D) => Promise<AxiosResponse<any, any>>) {
 	return createAsyncThunk(actionName, async (data: D, thunkApi) => {
@@ -18,23 +18,23 @@ function createAsyncThunkHOC<D>(actionName: string, apiFunc: (data: D) => Promis
 	});
 }
 
-export const createIngredient = createAsyncThunkHOC<CreateIngredientType>(
-	'ingredients/createIngredient',
-	IngredientService.createIngredient
+export const createProduct = createAsyncThunkHOC<CreateProductType>(
+	'products/createProduct',
+	ProductService.createProduct
 );
 
-export const updateIngredient = createAsyncThunkHOC<IngredientType>(
-	'ingredients/updateIngredient',
-	IngredientService.updateIngredient
+export const updateProduct = createAsyncThunkHOC<ProductType>(
+	'products/updateProduct',
+	ProductService.updateProduct
 );
 
-export const getIngredient = createAsyncThunkHOC<string>('ingredients/getIngredient', IngredientService.getIngredient);
+export const getProduct = createAsyncThunkHOC<string>('products/getProduct', ProductService.getProduct);
 
-export const deleteIngredient = createAsyncThunkHOC<string>('ingredients/deleteIngredient', IngredientService.deleteIngredient);
+export const deleteProduct = createAsyncThunkHOC<string>('products/deleteProduct', ProductService.deleteProduct);
 
-export const getIngredientList = createAsyncThunk('ingredients/getIngredientList', async (_, thunkApi) => {
+export const getProductList = createAsyncThunk('products/getProductList', async (_, thunkApi) => {
 	try {
-		const response = await IngredientService.getIngredientList();
+		const response = await ProductService.getProductList();
 		const data = await response.data;
 		return thunkApi.fulfillWithValue(data);
 	} catch (error) {
@@ -44,12 +44,12 @@ export const getIngredientList = createAsyncThunk('ingredients/getIngredientList
 	}
 });
 
-export const getIngredientsPage = createAsyncThunk('ingredients/getIngredientsPage', async (_, thunkApi) => {
+export const getProductsPage = createAsyncThunk('products/getProductsPage', async (_, thunkApi) => {
 	try {
-		if (thunkApi.getState().ingredients.listInfo) {
-			const { itemsPerPage, pageNumber, orderBy } = thunkApi.getState().ingredients.listInfo;
+		if (thunkApi.getState().products.listInfo) {
+			const { itemsPerPage, pageNumber, orderBy } = thunkApi.getState().products.listInfo;
 			console.log({ itemsPerPage, pageNumber, orderBy });
-			const response = await IngredientService.getIngredientsPage({ itemsPerPage, pageNumber, orderBy });
+			const response = await ProductService.getProductsPage({ itemsPerPage, pageNumber, orderBy });
 			const res = await response.data;
 			return thunkApi.fulfillWithValue(res);
 		}
@@ -86,8 +86,8 @@ const initialState: StateType = {
 	error: undefined,
 };
 
-const ingredientsSlice = createSlice({
-	name: 'ingredients',
+const productsSlice = createSlice({
+	name: 'products',
 	initialState: initialState,
 	reducers: {
 		setLoading: (state, action) => {
@@ -104,7 +104,7 @@ const ingredientsSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(getIngredientsPage.fulfilled, (state, action) => {
+		builder.addCase(getProductsPage.fulfilled, (state, action) => {
 			state.listInfo = {
 				...state.listInfo,
 				totalPages: action.payload.totalPages,
@@ -113,29 +113,29 @@ const ingredientsSlice = createSlice({
 			};
 			state.list = action.payload.result;
 		});
-		builder.addCase(getIngredientList.fulfilled, (state, action) => {
+		builder.addCase(getProductList.fulfilled, (state, action) => {
 			state.list = action.payload;
 		});
-		builder.addCase(getIngredient.fulfilled, (state, action) => {
+		builder.addCase(getProduct.fulfilled, (state, action) => {
 			state.item = action.payload;
 		});
-		builder.addCase(createIngredient.fulfilled, (state, action) => {
+		builder.addCase(createProduct.fulfilled, (state, action) => {
 			state.item = action.payload;
 		});
-		builder.addCase(updateIngredient.fulfilled, (state, action) => {
+		builder.addCase(updateProduct.fulfilled, (state, action) => {
 			state.item = action.payload;
 		});
-		builder.addCase(deleteIngredient.fulfilled, (state, action) => {
+		builder.addCase(deleteProduct.fulfilled, (state, action) => {
 			state.item = action.payload;
 		});
 		builder.addMatcher(
 			isAnyOf(
-				createIngredient.pending,
-				updateIngredient.pending,
-				getIngredientList.pending,
-				getIngredientsPage.pending,
-				getIngredient.pending,
-				deleteIngredient.pending
+				createProduct.pending,
+				updateProduct.pending,
+				getProductList.pending,
+				getProductsPage.pending,
+				getProduct.pending,
+				deleteProduct.pending
 			),
 			(state) => {
 				state.loading = true;
@@ -143,12 +143,12 @@ const ingredientsSlice = createSlice({
 		);
 		builder.addMatcher(
 			isAnyOf(
-				createIngredient.fulfilled,
-				updateIngredient.fulfilled,
-				getIngredientList.fulfilled,
-				getIngredientsPage.fulfilled,
-				getIngredient.fulfilled,
-				deleteIngredient.fulfilled
+				createProduct.fulfilled,
+				updateProduct.fulfilled,
+				getProductList.fulfilled,
+				getProductsPage.fulfilled,
+				getProduct.fulfilled,
+				deleteProduct.fulfilled
 			),
 			(state) => {
 				state.loading = false;
@@ -156,12 +156,12 @@ const ingredientsSlice = createSlice({
 		);
 		builder.addMatcher(
 			isAnyOf(
-				createIngredient.rejected,
-				updateIngredient.rejected,
-				getIngredientList.rejected,
-				getIngredientsPage.rejected,
-				getIngredient.rejected,
-				deleteIngredient.rejected,
+				createProduct.rejected,
+				updateProduct.rejected,
+				getProductList.rejected,
+				getProductsPage.rejected,
+				getProduct.rejected,
+				deleteProduct.rejected,
 			),
 			(state, action) => {
 				console.log('action.payload ', action.payload);
@@ -172,5 +172,5 @@ const ingredientsSlice = createSlice({
 	},
 });
 
-export const { setLoading, setPageNumber, setItemsPerPage, setOrderBy } = ingredientsSlice.actions;
-export const ingredientsReducer = ingredientsSlice.reducer;
+export const { setLoading, setPageNumber, setItemsPerPage, setOrderBy } = productsSlice.actions;
+export const productsReducer = productsSlice.reducer;

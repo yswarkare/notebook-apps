@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid2';
 import { IconButton, styled, TextField, Tooltip, Typography } from "@mui/material";
 import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
 import { Controller } from "react-hook-form";
-import { IngredientType } from '../../models/ingredient.model';
+import { ProductType } from '../../models/products.model';
 
 const Item = styled(Typography)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -15,7 +15,7 @@ const Item = styled(Typography)(({ theme }) => ({
 
 type Props = {
   edit: boolean
-  item: IngredientType
+  item: ProductType
   index: number
   errors: any
   loading: boolean
@@ -28,7 +28,7 @@ type Props = {
   deleteHandler: CallableFunction
 }
 
-const IngredientRowUi = ({
+const ProductRowUi = ({
   edit,
   item,
   index,
@@ -123,7 +123,7 @@ const IngredientRowUi = ({
             </IconButton >
           </Tooltip>
           <Tooltip placement="top" title="Delete">
-            <IconButton loading={loading} onClick={(e) => { deleteHandler() }}>
+            <IconButton loading={loading} onClick={() => { deleteHandler() }}>
               <Delete />
             </IconButton>
           </Tooltip>
@@ -132,4 +132,4 @@ const IngredientRowUi = ({
     </>;
 }
 
-export default IngredientRowUi;
+export default ProductRowUi;
