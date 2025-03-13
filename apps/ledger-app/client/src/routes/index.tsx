@@ -11,11 +11,16 @@ const ErrorPage = lazy(async () => await import("../pages/error/ErrorPage"));
 const Inventory = lazy(async () => await import("../pages/inventory/Inventory"));
 const Ingredients = lazy(async () => await import("../pages/ingredients/Ingredients"));
 const Products = lazy(async () => await import("../pages/products/Products"));
+const ManageProducts = lazy(async () => await import("../pages/products/manage-products"));
 const ProductsTable = lazy(async () => await import("../components/products/products-table"));
 const CreateProducts = lazy(async () => await import("../components/products/create-products"));
 const ProductPage = lazy(async () => await import("../components/products/product-page"));
 const IngredientsTable = lazy(async () => await import("../components/ingredients/ingredients-table"));
 const CreateIngredients = lazy(async () => await import("../components/ingredients/create-ingredients"));
+const ManageRecipes = lazy(async () => await import("../pages/recipes/manage-recipes"));
+const RecipeList = lazy(async () => await import("../components/recipes/recipe-list"));
+const CreateRecipe = lazy(async () => await import("../components/recipes/create-recipe"));
+const RecipePage = lazy(async () => await import("../components/recipes/recipe-page"));
 
 
 const routes: Array<RouteObject> = [{
@@ -28,13 +33,13 @@ const routes: Array<RouteObject> = [{
     path: path.ingredients,
     element: <Ingredients />,
     children: [{
-      path: path.ingredient_pages.default,
+      path: path._ingredient.default,
       element: <IngredientsTable />
     }, {
-      path: path.ingredient_pages.table,
+      path: path._ingredient.table,
       element: <IngredientsTable />
     }, {
-      path: path.ingredient_pages.create,
+      path: path._ingredient.create,
       element: <CreateIngredients />
     }]
   }, {
@@ -44,17 +49,40 @@ const routes: Array<RouteObject> = [{
     path: path.products,
     element: <Products />,
     children: [{
-      path: path.product_pages.default,
-      element: <ProductsTable />
+      path: path._products.default,
+      element: <ManageProducts />,
+      children: [
+        {
+          path: path._products.default,
+          element: <ProductsTable />
+        }, {
+          path: path._products._manage.table,
+          element: <ProductsTable />
+        }, {
+          path: path._products._manage.create,
+          element: <CreateProducts />
+        },
+      ]
     }, {
-      path: path.product_pages.table,
-      element: <ProductsTable />
-    }, {
-      path: path.product_pages.create,
-      element: <CreateProducts />
-    }, {
-      path: `${path.product_pages.page}/:productId`,
-      element: <ProductPage />
+      path: `${path._products.product}/:productName`,
+      element: <ProductPage />,
+      children: [{
+        path: path._products._recipes.default,
+        element: <ManageRecipes></ManageRecipes>,
+        children: [{
+          path: path._products._recipes._recipe_param.default,
+          element: <RecipeList></RecipeList>,
+        },{
+          path: path._products._recipes._recipe_param.list,
+          element: <RecipeList></RecipeList>,
+        }, {
+          path: path._products._recipes._recipe_param.create,
+          element: <CreateRecipe></CreateRecipe>,
+        }]
+      }, {
+        path: path._products._recipes.recipe,
+        element: <RecipePage></RecipePage>,
+      }]
     }]
   }, {
     path: path.about,

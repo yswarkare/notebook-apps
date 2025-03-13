@@ -5,18 +5,36 @@ const path = {
 	signup: '/signup',
 	about: '/about',
 	ingredients: '/ingredients',
-	ingredient_pages: {
+	_ingredient: {
 		default: '/ingredients/',
 		table: '/ingredients/table',
 		create: '/ingredients/create',
 	},
 	inventory: '/inventory',
 	products: '/products',
-	product_pages: {
+	_products: {
 		default: '/products/',
-		table: '/products/table',
-		page: '/products/product-page',
-		create: '/products/create',
+		product: '/products/product',
+		_recipes: {
+			default: '/products/product/:productName',
+			recipe: '/products/product/:productName/recipe',
+			_recipe_param: {
+				default: '/products/product/:productName/recipe/',
+				list: '/products/product/:productName/recipe/list',
+				create: '/products/product/:productName/recipe/create',
+			},
+			_recipe: (productName: string) => ({
+				default: `/products/product/${productName}/recipe/`,
+				list: `/products/product/${productName}/recipe/list`,
+				create: `/products/product/${productName}/recipe/create`,
+			})
+		},
+		manage: '/products/manage',
+		_manage: {
+			default: '/products/manage/',
+			table: '/products/manage/list',
+			create: '/products/manage/create',
+		}
 	},
 };
 

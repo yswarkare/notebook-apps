@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import AuthService from "../services/auth.service";
-import { PageLoader } from "yw-icons";
-import { Navigate, useNavigate } from 'react-router-dom';
-import path from "../routes/path";
 import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from 'react-router-dom';
+import { PageLoader } from "yw-icons";
+import AuthService from "../services/auth.service";
 import { setLoggedIn } from "../store/slices/user";
+import path from "../routes/path";
 
 export default function AuthRouter({ children }) {
   const dispatch = useDispatch()

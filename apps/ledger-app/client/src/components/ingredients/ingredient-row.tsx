@@ -6,7 +6,7 @@ import { CreateIngredientType, ingredientSchema, IngredientType } from "../../mo
 import { getIngredientList, updateIngredient, deleteIngredient } from "../../store/slices/ingredients";
 import { toast } from 'react-toastify';
 import IngredientRowUi from "./ingredient-row-ui"
-import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
+import CustomTableRowUi from "../CustomTable/custom-table-row-ui";
 
 type PropTypes = {
   item: IngredientType;
@@ -22,7 +22,6 @@ const IngredientRow = ({ item, index }: PropTypes) => {
   const { control, setValue, handleSubmit, formState: { isValid, errors }, reset } = useForm<CreateIngredientType>({
     resolver: yupResolver<CreateIngredientType>(ingredientSchema),
   });
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   useEffect(() => {
     setValue('name', item.name);
@@ -51,8 +50,7 @@ const IngredientRow = ({ item, index }: PropTypes) => {
     }
   }
 
-  const confirmYesHandler = async () => {
-    setOpenDialog(false)
+  const deleteHandler = async () => {
     try {
       await dispatch(deleteIngredient())
       await dispatch(getIngredientList())
@@ -66,40 +64,21 @@ const IngredientRow = ({ item, index }: PropTypes) => {
     }
   }
 
-  const deleteHandler = () => {
-    setOpenDialog(true)
-  }
-
-  const confirmNoHandler = () => {
-    setOpenDialog(false)
-  }
-
   return (
-    <>
-      <IngredientRowUi
-        edit={edit}
-        item={item}
-        index={index}
-        errors={errors}
-        loading={loading}
-        control={control}
-        pageNumber={pageNumber}
-        itemsPerPage={itemsPerPage}
-        setEdit={setEdit}
-        submitHandler={submitHandler}
-        handleSubmit={handleSubmit}
-        deleteHandler={deleteHandler}
-      />
-      {openDialog &&
-        <ConfirmationDialog
-          id={item.id}
-          open={openDialog}
-          content={`Are you sure you want to delete ${item.name}?`}
-          handleNo={confirmNoHandler}
-          handleYes={confirmYesHandler}
-        />
-      }
-    </>
+    <CustomTableRowUi
+      edit={edit}
+      item={item}
+      index={index}
+      errors={errors}
+      loading={loading}
+      control={control}
+      pageNumber={pageNumber}
+      itemsPerPage={itemsPerPage}
+      setEdit={setEdit}
+      submitHandler={submitHandler}
+      handleSubmit={handleSubmit}
+      deleteHandler={deleteHandler}
+    />
   )
 }
 

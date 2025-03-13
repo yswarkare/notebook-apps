@@ -20,7 +20,7 @@ function RoutedTabs({ id, tabs, nestedLevel }: Props) {
   const navigate = useNavigate()
   const match = useMatches()
 
-  useEffect(()=>{
+  useEffect(() => {
     if (match[nestedLevel]) {
       let index = 0;
       tabs.forEach((el, i) => {
@@ -38,7 +38,7 @@ function RoutedTabs({ id, tabs, nestedLevel }: Props) {
   };
 
   return (
-    <Box sx={{ bgcolor: 'background.paper', width: 500 }}>
+    <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
       <AppBar position="static">
         <Tabs
           value={value}
@@ -56,4 +56,5 @@ function RoutedTabs({ id, tabs, nestedLevel }: Props) {
     </Box>
   )
 }
+
 export default RoutedTabs

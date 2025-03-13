@@ -18,17 +18,13 @@ function createAsyncThunkHOC<D>(actionName: string, apiFunc: (data: D) => Promis
 	});
 }
 
-export const createProduct = createAsyncThunkHOC<CreateProductType>(
-	'products/createProduct',
-	ProductService.createProduct
-);
+export const createProduct = createAsyncThunkHOC<CreateProductType>('products/createProduct', ProductService.createProduct);
 
-export const updateProduct = createAsyncThunkHOC<ProductType>(
-	'products/updateProduct',
-	ProductService.updateProduct
-);
+export const updateProduct = createAsyncThunkHOC<ProductType>('products/updateProduct', ProductService.updateProduct);
 
 export const getProduct = createAsyncThunkHOC<string>('products/getProduct', ProductService.getProduct);
+
+export const getProductByName = createAsyncThunkHOC<string>('products/getProductByName', ProductService.getProductByName);
 
 export const deleteProduct = createAsyncThunkHOC<string>('products/deleteProduct', ProductService.deleteProduct);
 
@@ -62,8 +58,11 @@ export const getProductsPage = createAsyncThunk('products/getProductsPage', asyn
 
 type StateType = {
 	loading: boolean;
-	item: object;
+	product: object;
 	list: Array<object>;
+	pageInfo: {
+		productId: string;
+	};
 	listInfo: {
 		totalPages: number;
 		itemsPerPage: number;
@@ -75,8 +74,11 @@ type StateType = {
 
 const initialState: StateType = {
 	loading: false,
-	item: {},
+	product: {},
 	list: [],
+	pageInfo: {
+		productId: '',
+	},
 	listInfo: {
 		totalPages: 0,
 		itemsPerPage: 5,
@@ -102,6 +104,9 @@ const productsSlice = createSlice({
 		setItemsPerPage: (state, action) => {
 			state.listInfo.itemsPerPage = action.payload;
 		},
+		setProductId: (state, action) => {
+			state.pageInfo.productId = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getProductsPage.fulfilled, (state, action) => {
@@ -117,16 +122,19 @@ const productsSlice = createSlice({
 			state.list = action.payload;
 		});
 		builder.addCase(getProduct.fulfilled, (state, action) => {
-			state.item = action.payload;
+			state.product = action.payload;
+		});
+		builder.addCase(getProductByName.fulfilled, (state, action) => {
+			state.product = action.payload;
 		});
 		builder.addCase(createProduct.fulfilled, (state, action) => {
-			state.item = action.payload;
+			state.product = action.payload;
 		});
 		builder.addCase(updateProduct.fulfilled, (state, action) => {
-			state.item = action.payload;
+			state.product = action.payload;
 		});
 		builder.addCase(deleteProduct.fulfilled, (state, action) => {
-			state.item = action.payload;
+			state.product = action.payload;
 		});
 		builder.addMatcher(
 			isAnyOf(
@@ -135,6 +143,7 @@ const productsSlice = createSlice({
 				getProductList.pending,
 				getProductsPage.pending,
 				getProduct.pending,
+				getProductByName.pending,
 				deleteProduct.pending
 			),
 			(state) => {
@@ -148,6 +157,7 @@ const productsSlice = createSlice({
 				getProductList.fulfilled,
 				getProductsPage.fulfilled,
 				getProduct.fulfilled,
+				getProductByName.fulfilled,
 				deleteProduct.fulfilled
 			),
 			(state) => {
@@ -161,7 +171,8 @@ const productsSlice = createSlice({
 				getProductList.rejected,
 				getProductsPage.rejected,
 				getProduct.rejected,
-				deleteProduct.rejected,
+				getProductByName.rejected,
+				deleteProduct.rejected
 			),
 			(state, action) => {
 				console.log('action.payload ', action.payload);
@@ -172,5 +183,5 @@ const productsSlice = createSlice({
 	},
 });
 
-export const { setLoading, setPageNumber, setItemsPerPage, setOrderBy } = productsSlice.actions;
+export const { setLoading, setPageNumber, setItemsPerPage, setOrderBy, setProductId } = productsSlice.actions;
 export const productsReducer = productsSlice.reducer;

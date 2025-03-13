@@ -2,27 +2,29 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CreateProductType, productSchema, ProductType } from "../../models/products.model";
-import { getProductList, updateProduct, deleteProduct } from "../../store/slices/products";
+import { CreateProductType, productSchema } from "../../models/products.model";
+import { getProductList, updateProduct, deleteProduct, setProductId } from "../../store/slices/products";
 import { toast } from 'react-toastify';
-import ProductRowUi from "./product-row-ui"
-import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
+import { useNavigate } from "react-router-dom";
+import path from "../../routes/path";
+import { ItemType } from "../../models";
+import CustomTableRowUi from "../CustomTable/custom-table-row-ui";
 
 type PropTypes = {
-  item: ProductType;
+  item: ItemType;
   index: number;
 }
 
 const ProductRow = ({ item, index }: PropTypes) => {
   const [edit, setEdit] = useState<boolean>(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const loading = useSelector((state) => state.products.loading);
   const itemsPerPage = useSelector((state) => state.products.listInfo.itemsPerPage)
   const pageNumber = useSelector((state) => state.products.listInfo.pageNumber)
   const { control, setValue, handleSubmit, formState: { isValid, errors }, reset } = useForm<CreateProductType>({
     resolver: yupResolver<CreateProductType>(productSchema),
   });
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   useEffect(() => {
     setValue('name', item.name);
@@ -51,8 +53,7 @@ const ProductRow = ({ item, index }: PropTypes) => {
     }
   }
 
-  const confirmYesHandler = () => {
-    setOpenDialog(false)
+  const deleteHandler = () => {
     try {
       dispatch(deleteProduct())
       dispatch(getProductList())
@@ -66,40 +67,27 @@ const ProductRow = ({ item, index }: PropTypes) => {
     }
   }
 
-  const deleteHandler = () => {
-    setOpenDialog(true)
-  }
-
-  const confirmNoHandler = () => {
-    setOpenDialog(false)
+  const goToProductPage = () => {
+    dispatch(setProductId(item.id))
+    navigate(`${path._products.product}/${item.name.toLowerCase().replace(" ", '-')}`);
   }
 
   return (
-    <>
-      <ProductRowUi
-        edit={edit}
-        item={item}
-        index={index}
-        errors={errors}
-        loading={loading}
-        control={control}
-        pageNumber={pageNumber}
-        itemsPerPage={itemsPerPage}
-        setEdit={setEdit}
-        submitHandler={submitHandler}
-        handleSubmit={handleSubmit}
-        deleteHandler={deleteHandler}
-      />
-      {openDialog &&
-        <ConfirmationDialog
-          id={item.id}
-          open={openDialog}
-          content={`Are you sure you want to delete ${item.name}?`}
-          handleNo={confirmNoHandler}
-          handleYes={confirmYesHandler}
-        />
-      }
-    </>
+    <CustomTableRowUi
+      edit={edit}
+      item={item}
+      index={index}
+      errors={errors}
+      loading={loading}
+      control={control}
+      pageNumber={pageNumber}
+      itemsPerPage={itemsPerPage}
+      setEdit={setEdit}
+      goToItemPage={goToProductPage}
+      submitHandler={submitHandler}
+      handleSubmit={handleSubmit}
+      deleteHandler={deleteHandler}
+    />
   )
 }
 

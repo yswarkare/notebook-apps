@@ -1,5 +1,5 @@
 import ThemeSelector from "../components/ThemeSelector/ThemeSelector";
-import { customThemes } from "../utils/themes";
+import { customThemes } from "../themes";
 
 const Footer = () => {
   return (

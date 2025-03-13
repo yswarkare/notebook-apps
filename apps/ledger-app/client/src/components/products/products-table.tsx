@@ -1,7 +1,8 @@
 import { ChangeEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductsPage, setItemsPerPage, setPageNumber, setOrderBy } from '../../store/slices/products';
-import ProductsTableUi from './products-table-ui'
+import CustomTableUi from '../CustomTable/custom-table-ui';
+import ProductRow from './product-row';
 
 const ProductsTable = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,8 @@ const ProductsTable = () => {
   }
 
   return (
-    <ProductsTableUi 
+    <CustomTableUi 
+      id="products"
       list={list}
       loading={loading}
       orderBy={orderBy}
@@ -43,6 +45,7 @@ const ProductsTable = () => {
       handleChange={handleChange}
       handleOrderBy={handleOrderBy}
       handleItemsPerPage={handleItemsPerPage}
+      RowElement={ProductRow}
     />
   );
 }

@@ -1,8 +1,13 @@
+import { useState } from 'react';
+import { Controller } from "react-hook-form";
 import Grid from '@mui/material/Grid2';
 import { IconButton, styled, TextField, Tooltip, Typography } from "@mui/material";
-import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
-import { Controller } from "react-hook-form";
-import { IngredientType } from '../../models/ingredient.model';
+import Save from "@mui/icons-material/Save";
+import Cancel from "@mui/icons-material/Cancel";
+import Delete from "@mui/icons-material/Delete";
+import Edit from "@mui/icons-material/Edit";
+import ArticleIcon from '@mui/icons-material/Article';
+import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 
 const Item = styled(Typography)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -15,7 +20,7 @@ const Item = styled(Typography)(({ theme }) => ({
 
 type Props = {
   edit: boolean
-  item: IngredientType
+  item: ItemType
   index: number
   errors: any
   loading: boolean
@@ -23,12 +28,13 @@ type Props = {
   pageNumber: number
   itemsPerPage: number
   setEdit: CallableFunction
+  goToItemPage?: CallableFunction
   submitHandler: CallableFunction
   handleSubmit: CallableFunction
   deleteHandler: CallableFunction
 }
 
-const IngredientRowUi = ({
+const CustomTableRowUi = ({
   edit,
   item,
   index,
@@ -39,9 +45,26 @@ const IngredientRowUi = ({
   itemsPerPage,
   setEdit,
   submitHandler,
+  goToItemPage,
   handleSubmit,
   deleteHandler,
 }: Props) => {
+
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+  const confirmYesHandler = () => {
+    setOpenDialog(false)
+    deleteHandler()
+  }
+
+  const openConfirmationDialogBox = () => {
+    setOpenDialog(true)
+  }
+
+  const confirmNoHandler = () => {
+    setOpenDialog(false)
+  }
+
   return edit ?
     <>
       <Grid size={1}>
@@ -117,19 +140,36 @@ const IngredientRowUi = ({
       </Grid>
       <Grid size={3}>
         <Item>
+          {
+            goToItemPage &&
+            <Tooltip placement="top" title="Product Page">
+              <IconButton onClick={() => { goToItemPage() }}>
+                <ArticleIcon />
+              </IconButton >
+            </Tooltip>
+          }
           <Tooltip placement="top" title="Edit">
             <IconButton onClick={() => setEdit(true)}>
               <Edit />
             </IconButton >
           </Tooltip>
           <Tooltip placement="top" title="Delete">
-            <IconButton loading={loading} onClick={(e) => { deleteHandler() }}>
+            <IconButton loading={loading} onClick={() => { openConfirmationDialogBox() }}>
               <Delete />
             </IconButton>
           </Tooltip>
         </Item>
       </Grid>
+      {openDialog &&
+        <ConfirmationDialog
+          id={item.id}
+          open={openDialog}
+          content={`Are you sure you want to delete ${item.name}?`}
+          handleNo={confirmNoHandler}
+          handleYes={confirmYesHandler}
+        />
+      }
     </>;
 }
 
-export default IngredientRowUi;
+export default CustomTableRowUi;

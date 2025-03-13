@@ -1,17 +1,15 @@
-import { Box, Typography } from "@mui/material";
-import { BlocksShuffle } from "yw-icons";
-import ApiError from "../../components/ApiError";
-import { useSelector } from "react-redux";
-import CreateIngredients from "../../components/ingredients/create-ingredients";
-import IngredientsTable from "../../components/ingredients/ingredients-table";
-import ShowHide from "../../components/show-hide";
-import RoutedTabs from "../../components/Tabs/RoutedTabs";
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Box, Typography } from "@mui/material";
+import { PageLoader } from "yw-icons";
+import ApiError from "../../components/ApiError";
+import RoutedTabs from "../../components/Tabs/RoutedTabs";
 import path from "../../routes/path";
 
 const tabs = [
-  { label: 'Ingredients List', url: path.ingredient_pages.table },
-  { label: 'Create Ingredient', url: path.ingredient_pages.create },
+  { label: 'Ingredients List', url: path._ingredient.table },
+  { label: 'Create Ingredient', url: path._ingredient.create },
 ]
 
 const Ingredients = () => {
@@ -35,7 +33,9 @@ const Ingredients = () => {
     >
       <Typography variant={'h1'}>Ingredients</Typography>
       <RoutedTabs id="ingredient" tabs={tabs} nestedLevel={2} />
-      <Outlet />
+      <Suspense fallback={<PageLoader />}>
+        <Outlet />
+      </Suspense>
       {
         error! &&
         <ApiError error={error} />

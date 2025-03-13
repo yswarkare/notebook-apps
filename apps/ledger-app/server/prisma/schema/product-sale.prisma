@@ -1,0 +1,20 @@
+model ProductSale {
+  id          String   @id @default(uuid()) @db.Uuid
+  description String   @db.VarChar(255)
+  quantity    Float    @db.Real
+  price       Float    @db.Real
+  saleDate    DateTime @default(now())
+
+  productId String     @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  inventoryId String           @db.Uuid
+  inventory   ProductInventory @relation(fields: [inventoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("product-sale")
+}

@@ -1,11 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import path from '../routes/path';
 import AuthService from '../services/auth.service';
 import useApiCall from '../hooks/useApiCall';
 import { RingWithBg } from 'yw-icons'
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedIn } from '../store/slices/user';
-import RoutedTabs from "../components/tabs/RoutedTabs"
+import RoutedTabs from "../components/Tabs/RoutedTabs"
 
 const items1 = [
   { label: 'Home', url: path.home },

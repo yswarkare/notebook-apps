@@ -2,6 +2,8 @@ import { ChangeEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIngredientsPage, setItemsPerPage, setPageNumber, setOrderBy } from '../../store/slices/ingredients';
 import IngredientsTableUi from './ingredients-table-ui'
+import CustomTableUi from '../CustomTable/custom-table-ui';
+import IngredientRow from './ingredient-row';
 
 const IngredientsTable = () => {
   const dispatch = useDispatch();
@@ -33,7 +35,8 @@ const IngredientsTable = () => {
   }
 
   return (
-    <IngredientsTableUi 
+    <CustomTableUi
+      id='ingredients' 
       list={list}
       loading={loading}
       orderBy={orderBy}
@@ -43,6 +46,7 @@ const IngredientsTable = () => {
       handleChange={handleChange}
       handleOrderBy={handleOrderBy}
       handleItemsPerPage={handleItemsPerPage}
+      RowElement={IngredientRow}
     />
   );
 }

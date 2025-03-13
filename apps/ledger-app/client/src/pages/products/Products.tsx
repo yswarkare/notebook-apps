@@ -1,21 +1,9 @@
-import { Box, Typography } from "@mui/material";
-import { BlocksShuffle } from "yw-icons";
-import ApiError from "../../components/ApiError";
-import { useSelector } from "react-redux";
-import CreateProducts from "../../components/products/create-products";
-import ProductsTable from "../../components/products/products-table";
-import ShowHide from "../../components/show-hide";
-import path from "../../routes/path";
-import RoutedTabs from "../../components/Tabs/RoutedTabs";
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
-
-const tabs = [
-  { label: 'Products List', url: path.product_pages.table },
-  { label: 'Create Product', url: path.product_pages.create },
-]
+import { Box } from "@mui/material";
+import { PageLoader } from "yw-icons";
 
 const Products = () => {
-  const error = useSelector((state) => state.products.error);
 
   return (
     <Box
@@ -33,13 +21,9 @@ const Products = () => {
         gap: 2,
       }}
     >
-      <Typography variant={'h1'}>Products</Typography>
-      <RoutedTabs id="product" tabs={tabs} nestedLevel={2} />
-      <Outlet />
-      {
-        error! &&
-        <ApiError error={error} />
-      }
+      <Suspense fallback={<PageLoader />}>
+        <Outlet />
+      </Suspense>
     </Box>
   );
 }

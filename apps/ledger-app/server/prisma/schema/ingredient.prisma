@@ -1,0 +1,16 @@
+model Ingredient {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  inventory IngredientInventory[]
+  purchase  IngredientPurchase[]
+  recipeIngredients RecipeIngredients[]
+
+  @@map("ingredients")
+}

@@ -30,6 +30,10 @@ class ProductService {
 		return axiosInstance.get(`/api/products/${id}`);
 	}
 
+	static async getProductByName(name: string) {
+		return axiosInstance.get(`/api/products/name/${name}`);
+	}
+
 	static async deleteProduct(id: string) {
 		return axiosInstance.delete(`/api/products/${id}`);
 	}

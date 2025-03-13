@@ -1,0 +1,21 @@
+model IngredientPurchase {
+  id           String   @id @default(uuid()) @db.Uuid
+  description  String   @db.VarChar(255)
+  quantity     Float    @db.Real
+  cost         Float    @db.Real
+  purchaseDate DateTime @default(now())
+  expiryDate DateTime @default(now())
+
+  ingredientId String     @db.Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  inventoryId String             @unique @db.Uuid
+  inventory   IngredientInventory @relation(fields: [inventoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("ingredient-purchase")
+}
