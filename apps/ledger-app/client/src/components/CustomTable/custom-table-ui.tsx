@@ -63,6 +63,7 @@ const CustomTableUi = ({
           {
             !loading && list.length > 0 && list.map((item, index) => (
               <RowElement
+                key={item.id.slice(5)}
                 page={pageNumber}
                 item={item}
                 index={index}

@@ -3,7 +3,7 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { UserService } from '../user/user.service';
 import { CreateUserDto, UserRole } from '../user/dto/create-user.dto';
 import { compare } from 'bcryptjs';
-import { User } from '@prisma/client';
+import { User } from '../prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { TokenService } from '../token/token.service';

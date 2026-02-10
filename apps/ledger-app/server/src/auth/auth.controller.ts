@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { LocalAuthGuard } from '../token/guards/local-auth.guard';
 import { CurrentUser } from './current-user.decorator';
-import { User } from '@prisma/client';
+import { User } from '../prisma/client';
 import { Response } from 'express';
 import { JwtRefreshAuthGuard } from '../token/guards/jwt-refresh-auth.guard';
 import { JwtAuthGuard } from 'src/token/guards/jwt-auth.guard';

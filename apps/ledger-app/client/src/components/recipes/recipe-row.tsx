@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateRecipeType, recipeSchema } from "../../models/recipes.model";
 import { getRecipeList, updateRecipe, deleteRecipe, setRecipeId } from "../../store/slices/recipes";
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import path from "../../routes/path";
 import { ItemType } from "../../models";
 import CustomTableRowUi from "../CustomTable/custom-table-row-ui";
@@ -16,6 +16,7 @@ type PropTypes = {
 }
 
 const RecipeRow = ({ item, index }: PropTypes) => {
+  const params = useParams<{ productName: string }>()
   const [edit, setEdit] = useState<boolean>(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -69,7 +70,9 @@ const RecipeRow = ({ item, index }: PropTypes) => {
 
   const goToRecipePage = () => {
     dispatch(setRecipeId(item.id))
-    navigate(`${path._products._recipes.recipe}/${item.name.toLowerCase().replace(" ", '-')}`);
+    if (params?.productName) {
+      navigate(`${path._products._recipes._recipe_page(params.productName, item.name.toLowerCase().replace(" ", '-'))}`);
+    }
   }
 
   return (

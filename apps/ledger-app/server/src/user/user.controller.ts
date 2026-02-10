@@ -13,7 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../token/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { User } from '@prisma/client';
+import { User } from '../prisma/client';
 
 @Controller('user')
 export class UserController {

@@ -1,11 +1,19 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import path from '../routes/path';
 import AuthService from '../services/auth.service';
 import useApiCall from '../hooks/useApiCall';
-import { RingWithBg } from 'yw-icons'
-import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedIn } from '../store/slices/user';
 import RoutedTabs from "../components/Tabs/RoutedTabs"
+import Stack from '@mui/material/Stack';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import StyledSelect from '../components/StyledSelect/StyledSelect';
+import IconButton from '@mui/material/IconButton';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import RouteBreadcrumbs from "../components/breadcrumbs/route-breadcrumbs"
 
 const items1 = [
   { label: 'Home', url: path.home },
@@ -32,6 +40,13 @@ function Header() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const navigate = useNavigate()
   const { loading, callApi } = useApiCall<object, null>()
+  const [level1, setLevel1] = useState<string>(items3[0].url);
+  const [level2, setLevel2] = useState<string>('');
+  const [level3, setLevel3] = useState<string>('');
+
+  useEffect(() => {
+    
+  }, []);
 
   const logOut = async () => {
     try {
@@ -43,24 +58,19 @@ function Header() {
     }
   }
   return (
-    <div id='app-header' className="w-full flex flex-row justify-around items-center">
-      {/* {
-        headerItems(isLoggedIn).map(({ label, path }) => (
-          <Link to={path} key={path} className={`w-full hover:bg-secondary`}>{label}</Link>
-        ))
-      } */}
-      <RoutedTabs id='app-header' tabs={headerItems(isLoggedIn)} nestedLevel={1} />
-      {isLoggedIn && (
-        <button type='button' className='min-w-max relative flex flex-col justify-center items-center' onClick={() => { logOut() }}>
-          <span>Log Out</span>
-          {
-            loading && (
-              <div className='absolute'><RingWithBg /></div>
-            )
-          }
-        </button>
-      )}
-    </div>
+    <Stack id='app-header' direction='column' justifyContent='center' width="100%">
+      <Stack direction='row' justifyContent='around' width="100%">
+        <RoutedTabs id='app-header' tabs={headerItems(isLoggedIn)} nestedLevel={1} />
+        {isLoggedIn && (
+          <IconButton title="Log Out" loading={loading} onClick={() => { logOut() }}>
+            <PowerSettingsNewIcon></PowerSettingsNewIcon>
+          </IconButton>
+        )}
+      </Stack>
+      <Stack direction='row' justifyContent='around' width="100%">
+        <RouteBreadcrumbs />
+      </Stack>
+    </Stack>
   )
 }
 

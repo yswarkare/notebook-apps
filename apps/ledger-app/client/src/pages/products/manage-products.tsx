@@ -29,7 +29,7 @@ const ManageProducts = () => {
       }}
     >
       <Typography variant={'h3'}>Manage Products</Typography>
-      <RoutedTabs id="product" tabs={tabs} nestedLevel={2} />
+      <RoutedTabs id="product" tabs={tabs} nestedLevel={3} />
       <Suspense fallback={<PageLoader />}>
         <Outlet />
       </Suspense>

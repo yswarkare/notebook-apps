@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TokenPayload } from './entity/token-payload.interface';
-import { User } from '@prisma/client';
+import { User } from '../prisma/client';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

@@ -10,6 +10,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { ProductsModule } from './products/products.module';
 import { RecipeModule } from './recipe/recipe.module';
+import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients.module';
+import { PrismaClient } from './prisma/client';
 
 @Module({
   imports: [
@@ -21,8 +23,9 @@ import { RecipeModule } from './recipe/recipe.module';
     IngredientsModule,
     ProductsModule,
     RecipeModule,
+    RecipeIngredientsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, PrismaClient],
 })
 export class AppModule {}

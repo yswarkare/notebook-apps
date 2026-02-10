@@ -1,7 +1,12 @@
-import { Box, FormControl, FormLabel, MenuItem, Select } from '@mui/material';
 import { useEffect } from 'react';
 import { setTheme } from '../../store/slices/themes';
 import { useDispatch, useSelector } from 'react-redux';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+
 
 type Props = {
   themes?: string[];

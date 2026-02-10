@@ -80,7 +80,7 @@ const routes: Array<RouteObject> = [{
           element: <CreateRecipe></CreateRecipe>,
         }]
       }, {
-        path: path._products._recipes.recipe,
+        path: path._products._recipes._recipe_param.recipe,
         element: <RecipePage></RecipePage>,
       }]
     }]

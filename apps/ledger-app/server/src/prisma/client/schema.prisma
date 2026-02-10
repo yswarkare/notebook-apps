@@ -1,0 +1,321 @@
+model Images {
+  id      String    @id @default(uuid()) @db.Uuid
+  url     String    @db.VarChar(255)
+  orderId Int       @db.SmallInt
+  type    ImageType @default(url)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@unique([url, createdBy])
+  @@unique([orderId, createdBy])
+  @@map("images")
+}
+
+enum ImageType {
+  url
+  image
+}
+
+model IngredientInventory {
+  id          String   @id @default(uuid()) @db.Uuid
+  description String   @db.VarChar(255)
+  quantity    Float    @db.Real
+  cost        Float    @db.Real
+  isActive    Boolean  @default(true) @db.Boolean
+  emptiedDate DateTime @default(now())
+
+  ingredientId String     @db.Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  shopId String @db.Uuid
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  purchase IngredientPurchase[]
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("ingredient-inventory")
+}
+
+model IngredientPurchase {
+  id           String   @id @default(uuid()) @db.Uuid
+  description  String   @db.VarChar(255)
+  quantity     Float    @db.Real
+  cost         Float    @db.Real
+  purchaseDate DateTime @default(now())
+  expiryDate   DateTime @default(now())
+
+  ingredientId String     @db.Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  inventoryId String              @unique @db.Uuid
+  inventory   IngredientInventory @relation(fields: [inventoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("ingredient-purchase")
+}
+
+model Ingredient {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  inventory         IngredientInventory[]
+  purchase          IngredientPurchase[]
+  recipeIngredients RecipeIngredients[]
+
+  @@map("ingredients")
+}
+
+model ProductBatch {
+  id           String   @id @default(uuid()) @db.Uuid
+  description  String   @db.VarChar(255)
+  quantity     Float    @db.Real
+  cost         Float    @db.Real
+  purchaseDate DateTime @default(now())
+  expiryDate   DateTime @default(now())
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  inventory ProductInventory[]
+
+  batchType BatchType @default(PURCHASED)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("product-batch")
+}
+
+enum BatchType {
+  PURCHASED
+  MANUFACTURED
+}
+
+model ProductInventory {
+  id          String   @id @default(uuid()) @db.Uuid
+  description String   @db.VarChar(255)
+  quantity    Float    @db.Real
+  cost        Float    @db.Real
+  isActive    Boolean  @default(true) @db.Boolean
+  emptiedDate DateTime @default(now())
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  shopId String @db.Uuid
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  purchaseId String       @db.Uuid
+  purchase   ProductBatch @relation(fields: [purchaseId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  sale ProductSale[]
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("product-inventory")
+}
+
+model ProductSale {
+  id          String   @id @default(uuid()) @db.Uuid
+  description String   @db.VarChar(255)
+  quantity    Float    @db.Real
+  price       Float    @db.Real
+  saleDate    DateTime @default(now())
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  inventoryId String           @db.Uuid
+  inventory   ProductInventory @relation(fields: [inventoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("product-sale")
+}
+
+model Product {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  recipes           Recipe[]
+  sale              ProductSale[]
+  inventory         ProductInventory[]
+  purchase          ProductBatch[]
+  recipeIngredients RecipeIngredients[]
+
+  @@map("products")
+}
+
+model RecipeIngredients {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+  quantity    Float  @db.Real
+
+  recipeId String @db.Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  ingredientId String     @default("") @db.Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  productId String  @default("") @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("recipe-ingredients")
+}
+
+model Recipe {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  ingredients RecipeIngredients[]
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@map("recipe")
+}
+
+model ReferenceUrl {
+  id   String  @id @default(uuid()) @db.Uuid
+  url  String  @db.VarChar(255)
+  type UrlType @default(url)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@unique([url, createdBy])
+  @@map("reference_urls")
+}
+
+enum UrlType {
+  url
+  video
+  article
+  image
+}
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+  output          = "../../src/prisma/client"
+}
+
+// model NotebookTags {
+//   notebook   Notebook @relation(fields: [notebookId], references: [id])
+//   notebookId String
+//   tag        Tag      @relation(fields: [tagId], references: [id])
+//   tagId      String
+//   Article    Article? @relation(fields: [articleId], references: [id])
+//   articleId  String?
+
+//   @@id([notebookId, tagId])
+// }
+
+model Shop {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.VarChar(255)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  ingredients IngredientInventory[]
+  products    ProductInventory[]
+
+  @@map("shops")
+}
+
+model Tag {
+  id   String @id @default(uuid()) @db.Uuid
+  name String @db.VarChar(100)
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  @@unique([name, createdBy])
+  @@map("tags")
+}
+
+model User {
+  id           String @id @default(uuid()) @db.Uuid
+  firstname    String @db.VarChar(50)
+  lastname     String @db.VarChar(50)
+  username     String @unique @db.VarChar(50)
+  phoneNumber  String @unique @db.VarChar(20)
+  email        String @unique @db.VarChar(50)
+  password     String @db.VarChar(100)
+  refreshToken String @db.VarChar(255)
+
+  role Role @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+}

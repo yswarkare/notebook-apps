@@ -30,7 +30,7 @@ function RoutedTabs({ id, tabs, nestedLevel }: Props) {
       })
       setValue(index)
     }
-  }, [tabs, nestedLevel])
+  }, [tabs, nestedLevel, match])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
